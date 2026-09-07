@@ -170,8 +170,16 @@
                     </div>
 
                     <div class="flex flex-wrap gap-3 mb-8">
-                        @if($product->variants->isNotEmpty())
+                        @php
+                            $hasVariants = $product->variants->isNotEmpty();
+                            $hasStock = $product->stock > 0 || $product->variants->where('stock', '>', 0)->count() > 0;
+                        @endphp
+
+                        @if($hasVariants)
                             <input type="hidden" id="selected-variant-id" value="">
+                        @endif
+
+                        @if($hasStock)
                             <div class="flex gap-2">
                                 <div class="relative">
                                     <button class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="decrementQty()">
@@ -182,7 +190,7 @@
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                     </button>
                                 </div>
-                                <button class="btn btn-primary cart-add-btn" data-product-id="{{ $product->id }}" {{ $product->variants->isEmpty() ? '' : 'disabled' }}>
+                                <button class="btn btn-primary cart-add-btn" data-product-id="{{ $product->id }}" {{ $hasVariants ? 'disabled' : '' }}>
                                     Ajouter au panier
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                         <circle cx="9" cy="21" r="1"></circle>
@@ -192,26 +200,6 @@
                                 </button>
                             </div>
                         @else
-                            <div class="flex gap-2">
-                                <div class="relative">
-                                    <button class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="decrementQty()">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    </button>
-                                    <input type="number" id="qty-{{ $product->id }}" value="1" min="1" max="{{ $product->stock }}" class="form-input w-20 text-center pl-8 pr-8">
-                                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="incrementQty({{ $product->stock }})">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    </button>
-                                </div>
-                                <button class="btn btn-primary cart-add-btn" data-product-id="{{ $product->id }}">
-                                    Ajouter au panier
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        @endif
                             <button class="btn btn-outline stock-alert-btn" data-product-id="{{ $product->id }}">
                                 Me prévenir quand disponible
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -220,6 +208,7 @@
                                 </svg>
                             </button>
                         @endif
+
                         <button class="btn {{ $product->wishlists->isNotEmpty() ? 'btn-primary' : 'btn-outline' }} wishlist-toggle-btn" data-product-id="{{ $product->id }}" title="Coup de cœur">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ $product->wishlists->isNotEmpty() ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -339,7 +328,10 @@
                 infoDiv.classList.remove('hidden');
                 document.getElementById('selected-variant-label').textContent = [selectedVariant.size, selectedVariant.color, selectedVariant.material].filter(Boolean).join(' / ') || 'Standard';
                 document.getElementById('selected-variant-stock').textContent = selectedVariant.stock > 0 ? `${selectedVariant.stock} en stock` : 'Rupture de stock';
-                document.getElementById('selected-variant-price').textContent = new Intl.NumberFormat('fr-FR').format({{ $product->price }} + selectedVariant.price_adjustment) + ' FCFA';
+                document.getElementById('selected-variant-price').textContent =
+                new Intl.NumberFormat('fr-FR').format(
+                    Number({{ $product->price }}) + Number(selectedVariant.price_adjustment || 0)
+                ) + ' FCFA';
                 document.getElementById('selected-variant-id').value = selectedVariant.id;
                 addBtn.disabled = selectedVariant.stock <= 0;
                 if (qtyInput) qtyInput.max = Math.max(1, selectedVariant.stock);
@@ -388,6 +380,10 @@
             document.querySelectorAll('.cart-add-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
+                    if (this.dataset.adding === 'true') return;
+                    this.dataset.adding = 'true';
+                    this.disabled = true;
+
                     const productId = this.dataset.productId;
                     const qty = document.getElementById('qty-{{ $product->id }}').value;
                     const variantId = document.getElementById('selected-variant-id')?.value || '';
@@ -415,7 +411,11 @@
                             alert(data.message);
                         }
                     })
-                    .catch(() => alert('Erreur lors de l\'ajout au panier.'));
+                    .catch(() => alert('Erreur lors de l\'ajout au panier.'))
+                    .finally(() => {
+                        this.dataset.adding = 'false';
+                        this.disabled = false;
+                    });
                 });
             });
         });
