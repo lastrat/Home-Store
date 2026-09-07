@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class CatalogController extends Controller
@@ -22,15 +23,15 @@ class CatalogController extends Controller
         }
 
         if ($request->filled('size')) {
-            $query->where('size', $request->size);
+            $query->whereHas('variants', fn($q) => $q->where('size', $request->size));
         }
 
         if ($request->filled('color')) {
-            $query->where('color', $request->color);
+            $query->whereHas('variants', fn($q) => $q->where('color', $request->color));
         }
 
         if ($request->filled('material')) {
-            $query->where('material', $request->material);
+            $query->whereHas('variants', fn($q) => $q->where('material', $request->material));
         }
 
         if ($request->filled('min_price') || $request->filled('max_price')) {
@@ -73,19 +74,19 @@ class CatalogController extends Controller
             ->orderBy('name')
             ->get();
 
-        $sizes = Product::where('is_active', true)
+        $sizes = ProductVariant::whereHas('product', fn($q) => $q->where('is_active', true))
             ->whereNotNull('size')
             ->distinct()
             ->orderBy('size')
             ->pluck('size');
 
-        $colors = Product::where('is_active', true)
+        $colors = ProductVariant::whereHas('product', fn($q) => $q->where('is_active', true))
             ->whereNotNull('color')
             ->distinct()
             ->orderBy('color')
             ->pluck('color');
 
-        $materials = Product::where('is_active', true)
+        $materials = ProductVariant::whereHas('product', fn($q) => $q->where('is_active', true))
             ->whereNotNull('material')
             ->distinct()
             ->orderBy('material')
