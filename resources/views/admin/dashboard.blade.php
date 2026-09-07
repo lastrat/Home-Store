@@ -64,6 +64,61 @@
                 </div>
             </div>
 
+            <div class="mb-12">
+                <h3 class="font-bold text-lg mb-4">Gestion</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <a href="{{ route('admin.products.index') }}" class="card p-6 flex items-center gap-4 hover:border-gold-300 border-2 border-transparent transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gold-600">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold">Produits</p>
+                            <p class="text-sm text-gray-500">Catalogue & stocks</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-gold-600 transition-colors">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="{{ route('admin.orders.index') }}" class="card p-6 flex items-center gap-4 hover:border-gold-300 border-2 border-transparent transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold">Commandes</p>
+                            <p class="text-sm text-gray-500">Suivi & statuts</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-gold-600 transition-colors">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="{{ route('admin.clients.index') }}" class="card p-6 flex items-center gap-4 hover:border-gold-300 border-2 border-transparent transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-600">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold">Clients</p>
+                            <p class="text-sm text-gray-500">Base clients & données</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-gold-600 transition-colors">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="card p-6">
                     <h3 class="font-bold text-lg mb-4">Commandes récentes</h3>
