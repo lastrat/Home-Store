@@ -95,15 +95,21 @@ class AdminProductController extends Controller
         ]);
 
         if ($request->hasFile('image1')) {
-            Storage::disk('public')->delete($product->image1);
+            if ($product->image1) {
+                Storage::disk('public')->delete($product->image1);
+            }
             $validated['image1'] = $request->file('image1')->store('products', 'public');
         }
         if ($request->hasFile('image2')) {
-            Storage::disk('public')->delete($product->image2);
+            if ($product->image2) {
+                Storage::disk('public')->delete($product->image2);
+            }
             $validated['image2'] = $request->file('image2')->store('products', 'public');
         }
         if ($request->hasFile('image3')) {
-            Storage::disk('public')->delete($product->image3);
+            if ($product->image3) {
+                Storage::disk('public')->delete($product->image3);
+            }
             $validated['image3'] = $request->file('image3')->store('products', 'public');
         }
 
@@ -118,7 +124,16 @@ class AdminProductController extends Controller
 
     public function destroy(Product $product)
     {
-        Storage::disk('public')->delete($product->image1, $product->image2, $product->image3);
+        if ($product->image1) {
+            Storage::disk('public')->delete($product->image1);
+        }
+        if ($product->image2) {
+            Storage::disk('public')->delete($product->image2);
+        }
+        if ($product->image3) {
+            Storage::disk('public')->delete($product->image3);
+        }
+
         $product->delete();
 
         return back()->with('success', 'Produit supprimé.');
