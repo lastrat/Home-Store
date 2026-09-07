@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\Wishlist;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,17 +34,19 @@ class CartController extends Controller
         if ($item) {
             $newQty = $item->quantity + $quantity;
             if ($newQty > $product->stock) {
-                return back()->with('error', 'Stock insuffisant.');
+                return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
             }
             $item->update(['quantity' => $newQty]);
         } else {
             if ($product->stock < $quantity) {
-                return back()->with('error', 'Stock insuffisant.');
+                return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
             }
             $cart->items()->create(['product_id' => $product->id, 'quantity' => $quantity]);
         }
 
-        return back()->with('success', 'Produit ajouté au panier.');
+        $cartCount = $cart->items()->sum('quantity');
+
+        return $this->jsonOrBack('Produit ajouté au panier.', 'success', 200, ['cart_count' => $cartCount]);
     }
 
     public function update(Request $request, CartItem $item)
@@ -83,18 +86,20 @@ class CartController extends Controller
         if ($wishlist) {
             $wishlist->delete();
             $message = 'Retiré des coups de cœur.';
+            $active = false;
         } else {
             Wishlist::create(['user_id' => auth()->id(), 'product_id' => $product->id]);
             $message = 'Ajouté aux coups de cœur!';
+            $active = true;
         }
 
-        return back()->with('success', $message);
+        return $this->jsonOrBack($message, 'success', 200, ['active' => $active ?? false]);
     }
 
     public function toggleStockAlert(Product $product)
     {
         if ($product->stock > 0) {
-            return back()->with('error', 'Ce produit est encore en stock.');
+            return $this->jsonOrBack('Ce produit est encore en stock.', 'error', 422);
         }
 
         $alert = StockAlert::where('user_id', auth()->id())
@@ -109,6 +114,26 @@ class CartController extends Controller
             $message = 'Vous serez alerté quand le produit sera disponible!';
         }
 
-        return back()->with('success', $message);
+        return $this->jsonOrBack($message, 'success');
+    }
+
+    public function count(): JsonResponse
+    {
+        $cart = Cart::where('user_id', auth()->id())->first();
+        $count = $cart ? $cart->items()->sum('quantity') : 0;
+
+        return response()->json(['count' => $count]);
+    }
+
+    private function jsonOrBack(string $message, string $type = 'success', int $status = 200, array $extra = []): JsonResponse|\Illuminate\Http\RedirectResponse
+    {
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json(array_merge([
+                'success' => $type === 'success',
+                'message' => $message,
+            ], $extra), $status);
+        }
+
+        return back()->with($type, $message);
     }
 }

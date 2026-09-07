@@ -77,7 +77,7 @@
 
             async function updateCartCount() {
                 try {
-                    const response = await fetch('/api/cart/count', {
+                    const response = await fetch(`{{ route('ajax.cart.count') }}`, {
                         headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                         credentials: 'same-origin',
                     });
@@ -100,7 +100,7 @@
                     const qtyInput = document.getElementById(`qty-${productId}`);
                     const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
                     try {
-                        const response = await fetch(`/api/cart/add/${productId}?quantity=${quantity}`, {
+                        const response = await fetch(`{{ route('ajax.cart.add', ['product' => '__ID__']) }}`.replace('__ID__', productId) + `?quantity=${quantity}`, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken,
@@ -126,7 +126,7 @@
                     e.preventDefault();
                     const productId = wishlistBtn.dataset.productId;
                     try {
-                        const response = await fetch(`/api/cart/wishlist/${productId}`, {
+                        const response = await fetch(`{{ route('ajax.wishlist.toggle', ['product' => '__ID__']) }}`.replace('__ID__', productId), {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken,
@@ -159,7 +159,7 @@
                     e.preventDefault();
                     const productId = alertBtn.dataset.productId;
                     try {
-                        const response = await fetch(`/api/cart/alert/${productId}`, {
+                        const response = await fetch(`{{ route('ajax.stock.alert.toggle', ['product' => '__ID__']) }}`.replace('__ID__', productId), {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken,

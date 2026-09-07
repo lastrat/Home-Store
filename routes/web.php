@@ -52,6 +52,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/panier/favoris/{product}', [CartController::class, 'toggleWishlist'])->name('wishlist.toggle');
         Route::post('/panier/alerte/{product}', [CartController::class, 'toggleStockAlert'])->name('stock.alert.toggle');
 
+        Route::post('/ajax/cart/add/{product}', [CartController::class, 'add'])->name('ajax.cart.add');
+        Route::post('/ajax/cart/wishlist/{product}', [CartController::class, 'toggleWishlist'])->name('ajax.wishlist.toggle');
+        Route::post('/ajax/cart/alert/{product}', [CartController::class, 'toggleStockAlert'])->name('ajax.stock.alert.toggle');
+        Route::get('/ajax/cart/count', [CartController::class, 'count'])->name('ajax.cart.count');
+
         Route::get('/commande', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/commande', [CheckoutController::class, 'store'])->name('checkout.store');
         Route::get('/commande/{order}', [CheckoutController::class, 'receipt'])->name('checkout.receipt');
