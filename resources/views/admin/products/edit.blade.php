@@ -103,6 +103,73 @@
 
                         <div class="card p-8">
                             <h2 class="text-xl font-bold mb-6 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange-600">
+                                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                    </svg>
+                                </div>
+                                Variantes du produit
+                            </h2>
+                            <p class="text-sm text-gray-500 mb-4">Définissez les déclinaisons du produit. Chaque variante peut avoir sa propre taille, couleur, matière, stock et prix.</p>
+                            <div id="variants-container" class="space-y-4">
+                                @foreach(old('variants', $product->variants->toArray()) as $index => $variant)
+                                    <div class="variant-row bg-gray-50 rounded-xl p-5 border border-gray-200" data-index="{{ $index }}">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-semibold mb-1.5 text-gray-600">Taille</label>
+                                                <select name="variants[{{ $index }}][size]" class="form-input text-sm">
+                                                    <option value="">Non renseigné</option>
+                                                    <option value="S" {{ ($variant['size'] ?? '') == 'S' ? 'selected' : '' }}>S</option>
+                                                    <option value="M" {{ ($variant['size'] ?? '') == 'M' ? 'selected' : '' }}>M</option>
+                                                    <option value="L" {{ ($variant['size'] ?? '') == 'L' ? 'selected' : '' }}>L</option>
+                                                    <option value="XL" {{ ($variant['size'] ?? '') == 'XL' ? 'selected' : '' }}>XL</option>
+                                                    <option value="Unique" {{ ($variant['size'] ?? '') == 'Unique' ? 'selected' : '' }}>Unique</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold mb-1.5 text-gray-600">Couleur</label>
+                                                <input type="text" name="variants[{{ $index }}][color]" class="form-input text-sm" value="{{ $variant['color'] ?? '' }}" placeholder="Ex: Noir">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold mb-1.5 text-gray-600">Matière</label>
+                                                <input type="text" name="variants[{{ $index }}][material]" class="form-input text-sm" value="{{ $variant['material'] ?? '' }}" placeholder="Ex: Coton">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold mb-1.5 text-gray-600">Stock</label>
+                                                <input type="number" name="variants[{{ $index }}][stock]" class="form-input text-sm" value="{{ $variant['stock'] ?? 0 }}" min="0">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold mb-1.5 text-gray-600">Ajustement prix (FCFA)</label>
+                                                <input type="number" name="variants[{{ $index }}][price_adjustment]" class="form-input text-sm" value="{{ $variant['price_adjustment'] ?? 0 }}" min="0" step="0.01">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold mb-1.5 text-gray-600">SKU</label>
+                                                <input type="text" name="variants[{{ $index }}][sku]" class="form-input text-sm" value="{{ $variant['sku'] ?? '' }}" placeholder="RS-{{ $product->id }}-{{ $index }}">
+                                            </div>
+                                            <div class="flex items-end">
+                                                <button type="button" onclick="removeVariant(this)" class="w-full py-2 px-4 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors text-sm font-medium">
+                                                    Supprimer
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @if(!empty($variant['id']))
+                                            <input type="hidden" name="variants[{{ $index }}][id]" value="{{ $variant['id'] }}">
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button type="button" onclick="addVariant()" class="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 hover:border-gold-400 hover:text-gold-600 transition-colors text-sm font-semibold">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Ajouter une variante
+                            </button>
+                        </div>
+
+                        <div class="card p-8">
+                            <h2 class="text-xl font-bold mb-6 flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600">
                                         <line x1="4" y1="9" x2="20" y2="9"></line>
@@ -237,6 +304,8 @@
 
 @push('scripts')
     <script>
+        let variantIndex = {{ count(old('variants', $product->variants)) }};
+
         function previewImage(input) {
             const card = input.closest('.image-upload-card');
             const preview = card.querySelector('.image-preview');
@@ -247,6 +316,68 @@
                     preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" class="w-full h-full object-cover">';
                 };
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function addVariant() {
+            const container = document.getElementById('variants-container');
+            const div = document.createElement('div');
+            div.className = 'variant-row bg-gray-50 rounded-xl p-5 border border-gray-200';
+            div.setAttribute('data-index', variantIndex);
+            div.innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600">Taille</label>
+                        <select name="variants[${variantIndex}][size]" class="form-input text-sm">
+                            <option value="">Non renseigné</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="Unique">Unique</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600">Couleur</label>
+                        <input type="text" name="variants[${variantIndex}][color]" class="form-input text-sm" placeholder="Ex: Noir">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600">Matière</label>
+                        <input type="text" name="variants[${variantIndex}][material]" class="form-input text-sm" placeholder="Ex: Coton">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600">Stock</label>
+                        <input type="number" name="variants[${variantIndex}][stock]" class="form-input text-sm" value="0" min="0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600">Ajustement prix (FCFA)</label>
+                        <input type="number" name="variants[${variantIndex}][price_adjustment]" class="form-input text-sm" value="0" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1.5 text-gray-600">SKU</label>
+                        <input type="text" name="variants[${variantIndex}][sku]" class="form-input text-sm" placeholder="RS-{{ $product->id }}-${variantIndex}">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="button" onclick="removeVariant(this)" class="w-full py-2 px-4 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors text-sm font-medium">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+            variantIndex++;
+        }
+
+        function removeVariant(button) {
+            const row = button.closest('.variant-row');
+            const idInput = row.querySelector('input[name$="[id]"]');
+            if (idInput) {
+                idInput.value = '__DELETE__';
+                idInput.disabled = true;
+                row.style.opacity = '0.5';
+                row.style.pointerEvents = 'none';
+            } else {
+                row.remove();
             }
         }
     </script>

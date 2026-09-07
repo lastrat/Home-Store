@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -56,6 +57,13 @@ class AdminProductController extends Controller
             'badge' => 'nullable|in:nouveau,coup_de_coeur,bientot_epuise',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'variants' => 'nullable|array',
+            'variants.*.size' => 'nullable|string|max:50',
+            'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.material' => 'nullable|string|max:100',
+            'variants.*.sku' => 'nullable|string|max:100',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.price_adjustment' => 'nullable|numeric|min:0',
         ]);
 
         if ($request->hasFile('image1')) {
@@ -72,7 +80,15 @@ class AdminProductController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['is_featured'] = $request->boolean('is_featured');
 
-        Product::create($validated);
+        $product = Product::create($validated);
+
+        if ($request->has('variants')) {
+            foreach ($request->variants as $variantData) {
+                if ($variantData['stock'] > 0) {
+                    $product->variants()->create($variantData);
+                }
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Produit créé.');
     }
@@ -84,6 +100,7 @@ class AdminProductController extends Controller
             ->with('children')
             ->orderBy('name')
             ->get();
+        $product->load('variants');
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -106,6 +123,14 @@ class AdminProductController extends Controller
             'badge' => 'nullable|in:nouveau,coup_de_coeur,bientot_epuise',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'variants' => 'nullable|array',
+            'variants.*.id' => 'nullable|exists:product_variants,id',
+            'variants.*.size' => 'nullable|string|max:50',
+            'variants.*.color' => 'nullable|string|max:100',
+            'variants.*.material' => 'nullable|string|max:100',
+            'variants.*.sku' => 'nullable|string|max:100',
+            'variants.*.stock' => 'nullable|integer|min:0',
+            'variants.*.price_adjustment' => 'nullable|numeric|min:0',
         ]);
 
         if ($request->hasFile('image1')) {
@@ -132,6 +157,35 @@ class AdminProductController extends Controller
         $validated['is_featured'] = $request->boolean('is_featured');
 
         $product->update($validated);
+
+        if ($request->has('variants')) {
+            $existingIds = [];
+            $toDelete = [];
+            foreach ($request->variants as $variantData) {
+                if ($variantData['id'] ?? null) {
+                    if ($variantData['id'] === '__DELETE__') {
+                        continue;
+                    }
+                    $variant = ProductVariant::where('id', $variantData['id'])
+                        ->where('product_id', $product->id)
+                        ->first();
+
+                    if ($variant) {
+                        $variant->update($variantData);
+                        $existingIds[] = $variant->id;
+                    }
+                } else {
+                    if (!empty($variantData['size']) || !empty($variantData['color']) || !empty($variantData['material']) || !empty($variantData['stock'])) {
+                        $newVariant = $product->variants()->create($variantData);
+                        $existingIds[] = $newVariant->id;
+                    }
+                }
+            }
+
+            $product->variants()->whereNotIn('id', $existingIds)->delete();
+        } else {
+            $product->variants()->delete();
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour.');
     }
