@@ -37,9 +37,7 @@
                         @php
                             $cartCount = auth()->user()->cart?->items_count ?? 0;
                         @endphp
-                        @if($cartCount > 0)
-                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-gold-500 text-black text-xs font-bold rounded-full flex items-center justify-center">{{ $cartCount }}</span>
-                        @endif
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-gold-500 text-black text-xs font-bold rounded-full flex items-center justify-center {{ $cartCount > 0 ? '' : 'hidden' }}" data-cart-count>{{ $cartCount }}</span>
                     </a>
                     <div class="relative group">
                         <button class="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-white/5 transition-colors">
