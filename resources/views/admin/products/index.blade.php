@@ -212,6 +212,3 @@
         });
     </script>
 @endpush
-        </div>
-    </section>
-@endsection
