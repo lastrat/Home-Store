@@ -49,7 +49,11 @@
                                         <select name="category_id" class="form-input" required>
                                             <option value="">Sélectionner...</option>
                                             @foreach($categories as $category)
-                                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                <optgroup label="{{ $category->name }}">
+                                                    @foreach($category->children as $child)
+                                                        <option value="{{ $child->id }}" {{ old('category_id', $product->category_id) == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
                                             @endforeach
                                         </select>
                                     </div>
@@ -71,6 +75,27 @@
                                             <option value="coup_de_coeur" {{ old('badge', $product->badge) == 'coup_de_coeur' ? 'selected' : '' }}>Coup de cœur</option>
                                             <option value="bientot_epuise" {{ old('badge', $product->badge) == 'bientot_epuise' ? 'selected' : '' }}>Bientôt épuisé</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-2">Taille</label>
+                                        <select name="size" class="form-input">
+                                            <option value="">Non renseigné</option>
+                                            <option value="S" {{ old('size', $product->size) == 'S' ? 'selected' : '' }}>S</option>
+                                            <option value="M" {{ old('size', $product->size) == 'M' ? 'selected' : '' }}>M</option>
+                                            <option value="L" {{ old('size', $product->size) == 'L' ? 'selected' : '' }}>L</option>
+                                            <option value="XL" {{ old('size', $product->size) == 'XL' ? 'selected' : '' }}>XL</option>
+                                            <option value="Unique" {{ old('size', $product->size) == 'Unique' ? 'selected' : '' }}>Unique</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-2">Couleur</label>
+                                        <input type="text" name="color" class="form-input" value="{{ old('color', $product->color) }}" placeholder="Ex: Noir, Blanc...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-2">Matière</label>
+                                        <input type="text" name="material" class="form-input" value="{{ old('material', $product->material) }}" placeholder="Ex: Coton, Lin, Bois...">
                                     </div>
                                 </div>
                             </div>
