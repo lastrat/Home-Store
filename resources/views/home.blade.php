@@ -70,15 +70,7 @@
                     <p class="text-gray-500 mb-8">Les pièces qui définissent la saison. Des coupes modernes, des matières nobles, un style incomparable.</p>
                     <div class="grid grid-cols-2 gap-4">
                         @forelse($newProducts as $product)
-                            <div class="product-card">
-                                <div class="image-wrap">
-                                    <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=Mode' }}" alt="{{ $product->name }}">
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="font-semibold text-sm mb-1">{{ $product->name }}</h3>
-                                    <p class="text-gold-600 font-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</p>
-                                </div>
-                            </div>
+                            @include('components.product-card', ['product' => $product])
                         @empty
                             <p class="text-gray-400 col-span-2">Aucun produit pour le moment.</p>
                         @endforelse
@@ -90,15 +82,7 @@
                     <p class="text-gray-500 mb-8">Transformez votre intérieur avec nos pièces de décoration soigneusement sélectionnées pour un chic authentique.</p>
                     <div class="grid grid-cols-2 gap-4">
                         @forelse($decoProducts as $product)
-                            <div class="product-card">
-                                <div class="image-wrap">
-                                    <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=Deco' }}" alt="{{ $product->name }}">
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="font-semibold text-sm mb-1">{{ $product->name }}</h3>
-                                    <p class="text-gold-600 font-bold">{{ number_format($product->price, 0, ',', ' ') }} FCFA</p>
-                                </div>
-                            </div>
+                            @include('components.product-card', ['product' => $product])
                         @empty
                             <p class="text-gray-400 col-span-2">Aucun produit pour le moment.</p>
                         @endforelse
