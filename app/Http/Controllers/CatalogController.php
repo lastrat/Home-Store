@@ -96,7 +96,7 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
-        $product->load(['category', 'wishlists' => fn($q) => $q->where('user_id', auth()->id())]);
+        $product->load(['category', 'wishlists' => fn($q) => $q->where('user_id', auth()->id()), 'variants']);
         $related = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)

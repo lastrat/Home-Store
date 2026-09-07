@@ -90,6 +90,72 @@
                         </div>
                     @endif
 
+                    @if($product->variants->isNotEmpty())
+                        <div class="mb-8">
+                            <h3 class="text-lg font-bold mb-4">Déclinaisons disponibles</h3>
+                            <div class="bg-gray-50 rounded-2xl p-6 space-y-5">
+                                @php
+                                    $groupedBySize = $product->variants->groupBy('size');
+                                    $groupedByColor = $product->variants->groupBy('color');
+                                    $groupedByMaterial = $product->variants->groupBy('material');
+                                @endphp
+
+                                @if($groupedBySize->count() > 1)
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Taille</label>
+                                        <div class="flex flex-wrap gap-2" id="variant-size-options">
+                                            @foreach($groupedBySize as $size => $variants)
+                                                <button type="button" data-variant-size="{{ $size }}" class="variant-size-btn px-4 py-2 rounded-xl border-2 border-gray-200 text-sm font-medium hover:border-gold-400 transition-all">
+                                                    {{ $size }}
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($groupedByColor->count() > 1)
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Couleur</label>
+                                        <div class="flex flex-wrap gap-2" id="variant-color-options">
+                                            @foreach($groupedByColor as $color => $variants)
+                                                <button type="button" data-variant-color="{{ $color }}" class="variant-color-btn px-4 py-2 rounded-xl border-2 border-gray-200 text-sm font-medium hover:border-gold-400 transition-all">
+                                                    {{ $color }}
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($groupedByMaterial->count() > 1)
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Matière</label>
+                                        <div class="flex flex-wrap gap-2" id="variant-material-options">
+                                            @foreach($groupedByMaterial as $material => $variants)
+                                                <button type="button" data-variant-material="{{ $material }}" class="variant-material-btn px-4 py-2 rounded-xl border-2 border-gray-200 text-sm font-medium hover:border-gold-400 transition-all">
+                                                    {{ $material }}
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div id="selected-variant-info" class="hidden">
+                                    <div class="flex items-center gap-3 p-4 bg-white rounded-xl border border-gold-200">
+                                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                        <p class="text-sm">
+                                            <span class="font-semibold">Variante sélectionnée:</span>
+                                            <span id="selected-variant-label" class="text-gray-700"></span>
+                                            <span class="text-gray-400">|</span>
+                                            <span id="selected-variant-stock" class="text-green-600 font-medium"></span>
+                                            <span class="text-gray-400">|</span>
+                                            <span id="selected-variant-price" class="text-gold-600 font-bold"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="mb-8">
                         <h3 class="text-lg font-bold mb-3">Disponibilité</h3>
                         <div class="flex items-center gap-2">
@@ -104,7 +170,28 @@
                     </div>
 
                     <div class="flex flex-wrap gap-3 mb-8">
-                        @if($product->stock > 0)
+                        @if($product->variants->isNotEmpty())
+                            <input type="hidden" id="selected-variant-id" value="">
+                            <div class="flex gap-2">
+                                <div class="relative">
+                                    <button class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="decrementQty()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </button>
+                                    <input type="number" id="qty-{{ $product->id }}" value="1" min="1" max="{{ $product->stock }}" class="form-input w-20 text-center pl-8 pr-8">
+                                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="incrementQty()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </button>
+                                </div>
+                                <button class="btn btn-primary cart-add-btn" data-product-id="{{ $product->id }}" {{ $product->variants->isEmpty() ? '' : 'disabled' }}>
+                                    Ajouter au panier
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        @else
                             <div class="flex gap-2">
                                 <div class="relative">
                                     <button class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="decrementQty()">
@@ -124,7 +211,7 @@
                                     </svg>
                                 </button>
                             </div>
-                        @else
+                        @endif
                             <button class="btn btn-outline stock-alert-btn" data-product-id="{{ $product->id }}">
                                 Me prévenir quand disponible
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -214,9 +301,13 @@
 
 @push('scripts')
     <script>
+        const variants = @json($product->variants);
+        let selectedVariant = null;
+
         function incrementQty(max) {
             const input = document.getElementById('qty-{{ $product->id }}');
-            if (input && parseInt(input.value) < max) {
+            const currentMax = max || (selectedVariant ? selectedVariant.stock : {{ $product->stock }});
+            if (input && parseInt(input.value) < currentMax) {
                 input.value = parseInt(input.value) + 1;
             }
         }
@@ -225,6 +316,36 @@
             const input = document.getElementById('qty-{{ $product->id }}');
             if (input && parseInt(input.value) > 1) {
                 input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        function updateSelectedVariant() {
+            const size = document.querySelector('.variant-size-btn.selected')?.dataset.variantSize || null;
+            const color = document.querySelector('.variant-color-btn.selected')?.dataset.variantColor || null;
+            const material = document.querySelector('.variant-material-btn.selected')?.dataset.variantMaterial || null;
+
+            selectedVariant = variants.find(v => {
+                const matchSize = !size || v.size === size;
+                const matchColor = !color || v.color === color;
+                const matchMaterial = !material || v.material === material;
+                return matchSize && matchColor && matchMaterial;
+            });
+
+            const infoDiv = document.getElementById('selected-variant-info');
+            const addBtn = document.querySelector('.cart-add-btn');
+            const qtyInput = document.getElementById('qty-{{ $product->id }}');
+
+            if (selectedVariant) {
+                infoDiv.classList.remove('hidden');
+                document.getElementById('selected-variant-label').textContent = [selectedVariant.size, selectedVariant.color, selectedVariant.material].filter(Boolean).join(' / ') || 'Standard';
+                document.getElementById('selected-variant-stock').textContent = selectedVariant.stock > 0 ? `${selectedVariant.stock} en stock` : 'Rupture de stock';
+                document.getElementById('selected-variant-price').textContent = new Intl.NumberFormat('fr-FR').format({{ $product->price }} + selectedVariant.price_adjustment) + ' FCFA';
+                document.getElementById('selected-variant-id').value = selectedVariant.id;
+                addBtn.disabled = selectedVariant.stock <= 0;
+                if (qtyInput) qtyInput.max = Math.max(1, selectedVariant.stock);
+            } else {
+                infoDiv.classList.add('hidden');
+                addBtn.disabled = true;
             }
         }
 
@@ -243,6 +364,58 @@
                     });
                     thumb.classList.remove('border-transparent');
                     thumb.classList.add('border-gold-500', 'ring-2', 'ring-gold-200');
+                });
+            });
+
+            document.querySelectorAll('.variant-size-btn, .variant-color-btn, .variant-material-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const siblings = this.parentElement.querySelectorAll('button');
+                    siblings.forEach(s => {
+                        s.classList.remove('border-gold-500', 'bg-gold-50', 'text-gold-700');
+                        s.classList.add('border-gray-200');
+                    });
+                    this.classList.remove('border-gray-200');
+                    this.classList.add('border-gold-500', 'bg-gold-50', 'text-gold-700');
+                    updateSelectedVariant();
+                });
+            });
+
+            if (variants.length === 1) {
+                selectedVariant = variants[0];
+                updateSelectedVariant();
+            }
+
+            document.querySelectorAll('.cart-add-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = this.dataset.productId;
+                    const qty = document.getElementById('qty-{{ $product->id }}').value;
+                    const variantId = document.getElementById('selected-variant-id')?.value || '';
+
+                    fetch(`{{ route('ajax.cart.add', $product->id) }}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            quantity: parseInt(qty),
+                            variant_id: variantId || null,
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            if (data.cart_count !== undefined) {
+                                document.querySelectorAll('.cart-count').forEach(el => el.textContent = data.cart_count);
+                            }
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(() => alert('Erreur lors de l\'ajout au panier.'));
                 });
             });
         });
