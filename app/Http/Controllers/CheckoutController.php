@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+class CheckoutController extends Controller
+{
+    public function index()
+    {
+        $cart = Cart::where('user_id', auth()->id())->firstOrFail();
+        $cart->load('items.product.category');
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('catalog.index')->with('error', 'Votre panier est vide.');
+        }
+
+        return view('checkout.index', compact('cart'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'payment_method' => 'required|in:boutique,mobile_money,virement,livraison',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $cart = Cart::where('user_id', auth()->id())->with('items.product')->firstOrFail();
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('catalog.index')->with('error', 'Votre panier est vide.');
+        }
+
+        $orderNumber = 'HS-' . now()->year . '-' . str_pad(Order::count() + 1, 3, '0', STR_PAD_LEFT);
+
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'order_number' => $orderNumber,
+            'total' => $cart->total,
+            'payment_method' => $request->payment_method,
+            'status' => 'en_attente',
+            'notes' => $request->notes,
+        ]);
+
+        foreach ($cart->items as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'product_name' => $item->product->name,
+                'product_price' => $item->product->price,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->subtotal,
+            ]);
+
+            $product = $item->product;
+            $product->decrement('stock', $item->quantity);
+            if ($product->stock <= 0) {
+                $product->update(['badge' => 'bientot_epuise']);
+            }
+        }
+
+        $cart->items()->delete();
+
+        return redirect()->route('checkout.receipt', $order)->with('success', 'Commande créée avec succès!');
+    }
+
+    public function receipt(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $order->load('items.product');
+
+        return view('checkout.receipt', compact('order'));
+    }
+
+    public function downloadReceipt(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $order->load('items.product', 'user');
+
+        $pdf = Pdf::loadView('checkout.receipt-pdf', compact('order'))
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->download("recu-{$order->order_number}.pdf");
+    }
+}
