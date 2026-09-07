@@ -26,38 +26,104 @@
     <section class="section bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row gap-8">
-                <aside class="lg:w-64 flex-shrink-0 lg:sticky lg:top-28 lg:self-start">
+                <aside class="lg:w-72 flex-shrink-0 lg:sticky lg:top-28 lg:self-start space-y-6">
                     <div class="card p-6 space-y-6">
                         <div>
                             <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Famille</h3>
                             <div class="space-y-2">
-                                <a href="{{ route('catalog.index') }}" class="block text-sm {{ !request('family') ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">Tous</a>
-                                <a href="{{ route('catalog.index', ['family' => 'mode']) }}" class="block text-sm {{ request('family') == 'mode' ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">Mode</a>
-                                <a href="{{ route('catalog.index', ['family' => 'decoration']) }}" class="block text-sm {{ request('family') == 'decoration' ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">Décoration</a>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Catégories</h3>
-                            <div class="space-y-2">
-                                @foreach($categories as $category)
-                                    <a href="{{ route('catalog.index', array_merge(request()->query(), ['category_id' => $category->id])) }}" class="block text-sm {{ request('category_id') == $category->id ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">{{ $category->name }}</a>
+                                <a href="{{ route('catalog.index') }}" class="flex items-center gap-2 text-sm {{ !request('family') ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">
+                                    <span class="w-2 h-2 rounded-full {{ !request('family') ? 'bg-gold-500' : 'bg-gray-300' }}"></span>
+                                    Tous
+                                </a>
+                                @foreach($categories as $family)
+                                    <a href="{{ route('catalog.index', ['family' => $family->slug]) }}" class="flex items-center gap-2 text-sm {{ request('family') == $family->slug ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">
+                                        <span class="w-2 h-2 rounded-full {{ request('family') == $family->slug ? 'bg-gold-500' : 'bg-gray-300' }}"></span>
+                                        {{ $family->name }}
+                                    </a>
                                 @endforeach
                             </div>
                         </div>
-                        <div>
-                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Trier par</h3>
-                            <select onchange="window.location.href=this.value" class="form-input text-sm">
-                                <option value="{{ route('catalog.index', request()->except('sort')) }}" {{ !request('sort') ? 'selected' : '' }}>Par défaut</option>
-                                <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'newest'])) }}" {{ request('sort') == 'newest' ? 'selected' : '' }}>Plus récent</option>
-                                <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'price_asc'])) }}" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Prix croissant</option>
-                                <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'price_desc'])) }}" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Prix décroissant</option>
-                                <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'name'])) }}" {{ request('sort') == 'name' ? 'selected' : '' }}>Nom A-Z</option>
-                            </select>
+
+                        <div class="border-t border-gray-100 pt-4">
+                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Sous-catégories</h3>
+                            <div class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                                @foreach($subcategories as $subcategory)
+                                    <a href="{{ route('catalog.index', array_merge(request()->query(), ['category_id' => $subcategory->id])) }}" class="flex items-center gap-2 text-sm {{ request('category_id') == $subcategory->id ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">
+                                        <span class="text-xs">{{ $subcategory->parent->name ?? '' }}</span>
+                                        <span class="flex-1">{{ $subcategory->name }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
+
+                        <div class="border-t border-gray-100 pt-4">
+                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Taille</h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach(['S', 'M', 'L', 'XL', 'Unique'] as $size)
+                                    <a href="{{ route('catalog.index', array_merge(request()->except('size'), ['size' => $size])) }}" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all {{ request('size') == $size ? 'bg-gold-500 text-black border-gold-500' : 'bg-white text-gray-600 border-gray-200 hover:border-gold-300' }}">
+                                        {{ $size }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-4">
+                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Prix</h3>
+                            <div class="flex items-center gap-2">
+                                <input type="number" name="min_price" value="{{ request('min_price') }}" class="form-input text-sm" placeholder="Min" min="0">
+                                <span class="text-gray-400">-</span>
+                                <input type="number" name="max_price" value="{{ request('max_price') }}" class="form-input text-sm" placeholder="Max" min="0">
+                            </div>
+                            <button type="submit" form="price-filter-form" class="btn btn-primary btn-sm w-full mt-2">Appliquer</button>
+                            <form id="price-filter-form" method="GET" action="{{ route('catalog.index') }}" class="hidden">
+                                @foreach(request()->except('min_price', 'max_price') as $key => $value)
+                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                @endforeach
+                            </form>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-4">
+                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Couleur</h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($colors as $color)
+                                    <a href="{{ route('catalog.index', array_merge(request()->except('color'), ['color' => $color])) }}" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all {{ request('color') == $color ? 'bg-gold-500 text-black border-gold-500' : 'bg-white text-gray-600 border-gray-200 hover:border-gold-300' }}">
+                                        {{ $color }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-4">
+                            <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Matière</h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($materials as $material)
+                                    <a href="{{ route('catalog.index', array_merge(request()->except('material'), ['material' => $material])) }}" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all {{ request('material') == $material ? 'bg-gold-500 text-black border-gold-500' : 'bg-white text-gray-600 border-gray-200 hover:border-gold-300' }}">
+                                        {{ $material }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        @if(request()->hasAny(['family', 'category_id', 'size', 'color', 'material', 'min_price', 'max_price']))
+                            <div class="border-t border-gray-100 pt-4">
+                                <a href="{{ route('catalog.index') }}" class="btn btn-outline btn-sm w-full">Réinitialiser les filtres</a>
+                            </div>
+                        @endif
                     </div>
                 </aside>
 
                 <div class="flex-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <p class="text-sm text-gray-500">{{ $products->total() }} produit(s)</p>
+                        <select onchange="window.location.href=this.value" class="form-input text-sm">
+                            <option value="{{ route('catalog.index', request()->except('sort')) }}" {{ !request('sort') ? 'selected' : '' }}>Par défaut</option>
+                            <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'newest'])) }}" {{ request('sort') == 'newest' ? 'selected' : '' }}>Plus récent</option>
+                            <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'price_asc'])) }}" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Prix croissant</option>
+                            <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'price_desc'])) }}" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Prix décroissant</option>
+                            <option value="{{ route('catalog.index', array_merge(request()->except('sort'), ['sort' => 'name'])) }}" {{ request('sort') == 'name' ? 'selected' : '' }}>Nom A-Z</option>
+                        </select>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         @forelse($products as $product)
                             @include('components.product-card', ['product' => $product])

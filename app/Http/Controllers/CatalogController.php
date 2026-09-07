@@ -22,7 +22,15 @@ class CatalogController extends Controller
         }
 
         if ($request->filled('size')) {
-            $query->where('characteristics', 'like', '%' . $request->size . '%');
+            $query->where('size', $request->size);
+        }
+
+        if ($request->filled('color')) {
+            $query->where('color', $request->color);
+        }
+
+        if ($request->filled('material')) {
+            $query->where('material', $request->material);
         }
 
         if ($request->filled('min_price') || $request->filled('max_price')) {
@@ -30,14 +38,6 @@ class CatalogController extends Controller
                 $request->min_price ?? 0,
                 $request->max_price ?? 999999999,
             ]);
-        }
-
-        if ($request->filled('color')) {
-            $query->where('characteristics', 'like', '%' . $request->color . '%');
-        }
-
-        if ($request->filled('material')) {
-            $query->where('characteristics', 'like', '%' . $request->material . '%');
         }
 
         if ($request->filled('search')) {
@@ -59,9 +59,39 @@ class CatalogController extends Controller
         }
 
         $products = $query->paginate(24)->withQueryString();
-        $categories = Category::where('is_active', true)->orderBy('family')->orderBy('name')->get();
 
-        return view('catalog.index', compact('products', 'categories'));
+        $categories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with('children')
+            ->orderBy('family')
+            ->orderBy('name')
+            ->get();
+
+        $subcategories = Category::where('is_active', true)
+            ->whereNotNull('parent_id')
+            ->orderBy('family')
+            ->orderBy('name')
+            ->get();
+
+        $sizes = Product::where('is_active', true)
+            ->whereNotNull('size')
+            ->distinct()
+            ->orderBy('size')
+            ->pluck('size');
+
+        $colors = Product::where('is_active', true)
+            ->whereNotNull('color')
+            ->distinct()
+            ->orderBy('color')
+            ->pluck('color');
+
+        $materials = Product::where('is_active', true)
+            ->whereNotNull('material')
+            ->distinct()
+            ->orderBy('material')
+            ->pluck('material');
+
+        return view('catalog.index', compact('products', 'categories', 'subcategories', 'sizes', 'colors', 'materials'));
     }
 
     public function show(Product $product)

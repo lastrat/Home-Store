@@ -3,7 +3,7 @@
 @section('title', 'Home Store - Chic Living')
 
 @section('content')
-    <section class="hero">
+    <section class="hero" style="margin-top: 75px;">
         <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80');"></div>
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="max-w-2xl">

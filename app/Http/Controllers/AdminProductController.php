@@ -29,7 +29,11 @@ class AdminProductController extends Controller
 
     public function create()
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with('children')
+            ->orderBy('name')
+            ->get();
         return view('admin.products.create', compact('categories'));
     }
 
@@ -42,6 +46,9 @@ class AdminProductController extends Controller
             'characteristics' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'size' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:100',
+            'material' => 'nullable|string|max:100',
             'image1' => 'nullable|image|max:2048',
             'image2' => 'nullable|image|max:2048',
             'image3' => 'nullable|image|max:2048',
@@ -72,7 +79,11 @@ class AdminProductController extends Controller
 
     public function edit(Product $product)
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with('children')
+            ->orderBy('name')
+            ->get();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -85,6 +96,9 @@ class AdminProductController extends Controller
             'characteristics' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'size' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:100',
+            'material' => 'nullable|string|max:100',
             'image1' => 'nullable|image|max:2048',
             'image2' => 'nullable|image|max:2048',
             'image3' => 'nullable|image|max:2048',

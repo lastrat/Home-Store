@@ -15,28 +15,32 @@
                 <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     <div>
-                        <label class="block text-sm font-semibold mb-2">Nom du produit</label>
-                        <input type="text" name="name" class="form-input" required value="{{ old('name') }}">
+                        <label class="block text-sm font-semibold mb-2">Nom du produit <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" class="form-input" required value="{{ old('name') }}" placeholder="Ex: Robe élégante noir">
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Catégorie</label>
+                            <label class="block text-sm font-semibold mb-2">Catégorie <span class="text-red-500">*</span></label>
                             <select name="category_id" class="form-input" required>
                                 <option value="">Sélectionner...</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    <optgroup label="{{ $category->name }}">
+                                        @foreach($category->children as $child)
+                                        <option value="{{ $child->id }}" {{ old('category_id') == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
+                                    @endforeach
+                                    </optgroup>
                                 @endforeach
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Prix (FCFA)</label>
-                            <input type="number" name="price" step="0.01" class="form-input" required value="{{ old('price') }}">
+                            <label class="block text-sm font-semibold mb-2">Prix (FCFA) <span class="text-red-500">*</span></label>
+                            <input type="number" name="price" step="0.01" class="form-input" required value="{{ old('price') }}" placeholder="25000">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Stock</label>
-                            <input type="number" name="stock" class="form-input" required value="{{ old('stock', 0) }}">
+                            <label class="block text-sm font-semibold mb-2">Stock <span class="text-red-500">*</span></label>
+                            <input type="number" name="stock" class="form-input" required value="{{ old('stock', 0) }}" placeholder="0">
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-2">Badge</label>
@@ -44,12 +48,34 @@
                                 <option value="">Aucun</option>
                                 <option value="nouveau" {{ old('badge') == 'nouveau' ? 'selected' : '' }}>Nouveau</option>
                                 <option value="coup_de_coeur" {{ old('badge') == 'coup_de_coeur' ? 'selected' : '' }}>Coup de cœur</option>
+                                <option value="bientot_epuise" {{ old('badge') == 'bientot_epuise' ? 'selected' : '' }}>Bientôt épuisé</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Taille</label>
+                            <select name="size" class="form-input">
+                                <option value="">Non renseigné</option>
+                                <option value="S" {{ old('size') == 'S' ? 'selected' : '' }}>S</option>
+                                <option value="M" {{ old('size') == 'M' ? 'selected' : '' }}>M</option>
+                                <option value="L" {{ old('size') == 'L' ? 'selected' : '' }}>L</option>
+                                <option value="XL" {{ old('size') == 'XL' ? 'selected' : '' }}>XL</option>
+                                <option value="Unique" {{ old('size') == 'Unique' ? 'selected' : '' }}>Unique</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Couleur</label>
+                            <input type="text" name="color" class="form-input" value="{{ old('color') }}" placeholder="Ex: Noir, Blanc...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Matière</label>
+                            <input type="text" name="material" class="form-input" value="{{ old('material') }}" placeholder="Ex: Coton, Lin, Bois...">
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Description</label>
-                        <textarea name="description" rows="3" class="form-input">{{ old('description') }}</textarea>
+                        <textarea name="description" rows="3" class="form-input" placeholder="Décrivez le produit...">{{ old('description') }}</textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Caractéristiques</label>
