@@ -23,15 +23,24 @@ class CatalogController extends Controller
         }
 
         if ($request->filled('size')) {
-            $query->whereHas('variants', fn($q) => $q->where('size', $request->size));
+            $size = $request->size;
+            $query->where(function ($q) use ($size) {
+                $q->where('size', $size)->orWhereHas('variants', fn($q) => $q->where('size', $size));
+            });
         }
 
         if ($request->filled('color')) {
-            $query->whereHas('variants', fn($q) => $q->where('color', $request->color));
+            $color = $request->color;
+            $query->where(function ($q) use ($color) {
+                $q->where('color', $color)->orWhereHas('variants', fn($q) => $q->where('color', $color));
+            });
         }
 
         if ($request->filled('material')) {
-            $query->whereHas('variants', fn($q) => $q->where('material', $request->material));
+            $material = $request->material;
+            $query->where(function ($q) use ($material) {
+                $q->where('material', $material)->orWhereHas('variants', fn($q) => $q->where('material', $material));
+            });
         }
 
         if ($request->filled('min_price') || $request->filled('max_price')) {
@@ -74,20 +83,26 @@ class CatalogController extends Controller
             ->orderBy('name')
             ->get();
 
-        $sizes = ProductVariant::whereHas('product', fn($q) => $q->where('is_active', true))
-            ->whereNotNull('size')
+        $sizes = Product::where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNotNull('size')->orWhereHas('variants', fn($q) => $q->whereNotNull('size'));
+            })
             ->distinct()
             ->orderBy('size')
             ->pluck('size');
 
-        $colors = ProductVariant::whereHas('product', fn($q) => $q->where('is_active', true))
-            ->whereNotNull('color')
+        $colors = Product::where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNotNull('color')->orWhereHas('variants', fn($q) => $q->whereNotNull('color'));
+            })
             ->distinct()
             ->orderBy('color')
             ->pluck('color');
 
-        $materials = ProductVariant::whereHas('product', fn($q) => $q->where('is_active', true))
-            ->whereNotNull('material')
+        $materials = Product::where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNotNull('material')->orWhereHas('variants', fn($q) => $q->whereNotNull('material'));
+            })
             ->distinct()
             ->orderBy('material')
             ->pluck('material');
