@@ -99,15 +99,19 @@
                     const productId = cartBtn.dataset.productId;
                     const qtyInput = document.getElementById(`qty-${productId}`);
                     const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+                    const variantIdInput = document.getElementById('selected-variant-id');
+                    const variantId = variantIdInput ? variantIdInput.value : '';
                     try {
-                        const response = await fetch(`{{ route('ajax.cart.add', ['product' => '__ID__']) }}`.replace('__ID__', productId) + `?quantity=${quantity}`, {
+                        const response = await fetch(`{{ route('ajax.cart.add', ['product' => '__ID__']) }}`.replace('__ID__', productId), {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken,
                                 'Accept': 'application/json',
+                                'Content-Type': 'application/json',
                                 'X-Requested-With': 'XMLHttpRequest',
                             },
                             credentials: 'same-origin',
+                            body: JSON.stringify({ quantity, variant_id: variantId || null }),
                         });
                         const data = await response.json();
                         if (data.success) {

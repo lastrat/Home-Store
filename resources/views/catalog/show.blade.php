@@ -376,48 +376,6 @@
                 selectedVariant = variants[0];
                 updateSelectedVariant();
             }
-
-            document.querySelectorAll('.cart-add-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (this.dataset.adding === 'true') return;
-                    this.dataset.adding = 'true';
-                    this.disabled = true;
-
-                    const productId = this.dataset.productId;
-                    const qty = document.getElementById('qty-{{ $product->id }}').value;
-                    const variantId = document.getElementById('selected-variant-id')?.value || '';
-
-                    fetch(`{{ route('ajax.cart.add', $product->id) }}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            quantity: parseInt(qty),
-                            variant_id: variantId || null,
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert(data.message);
-                            if (data.cart_count !== undefined) {
-                                document.querySelectorAll('.cart-count').forEach(el => el.textContent = data.cart_count);
-                            }
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(() => alert('Erreur lors de l\'ajout au panier.'))
-                    .finally(() => {
-                        this.dataset.adding = 'false';
-                        this.disabled = false;
-                    });
-                });
-            });
         });
     </script>
 @endpush
