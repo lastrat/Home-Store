@@ -88,10 +88,29 @@ class CartController extends Controller
         $stock = $item->variant ? $item->variant->stock : $item->product->stock;
 
         if ($request->quantity > $stock) {
-            return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stock insuffisant.',
+                ], 422);
+            }
+
+            return back()->with('error', 'Stock insuffisant.');
         }
 
         $item->update(['quantity' => $request->quantity]);
+        $cart = $item->cart;
+        $cart->load('items.product', 'items.variant');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Panier mis à jour.',
+                'item_subtotal' => $item->subtotal,
+                'cart_total' => $cart->total,
+                'items_count' => $cart->items_count,
+            ]);
+        }
 
         return back()->with('success', 'Panier mis à jour.');
     }

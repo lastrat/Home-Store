@@ -6,7 +6,7 @@
     <section class="pt-28 pb-8 bg-white border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl sm:text-4xl font-bold mb-2">Mon Panier</h1>
-            <p class="text-gray-500">{{ $cart->items_count }} article(s) dans votre panier</p>
+            <p class="text-gray-500 cart-items-count">{{ $cart->items_count }} article(s) dans votre panier</p>
         </div>
     </section>
 
@@ -45,13 +45,20 @@
                                         <div>
                                             <h3 class="font-semibold mb-1">{{ $item->product->name }}</h3>
                                             <p class="text-sm text-gray-500">{{ $item->product->category->name }}</p>
+                                            @if($item->variant)
+                                                <p class="text-xs text-gold-600 mt-1">
+                                                    {{ $item->variant->size ? $item->variant->size . ' / ' : '' }}
+                                                    {{ $item->variant->color ? $item->variant->color . ' / ' : '' }}
+                                                    {{ $item->variant->material ? $item->variant->material : '' }}
+                                                </p>
+                                            @endif
                                             <p class="text-gold-600 font-bold mt-1">{{ number_format($item->product->price, 0, ',', ' ') }} FCFA</p>
                                         </div>
                                         <div class="flex items-center gap-3">
-                                            <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2">
+                                            <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2 cart-update-form" data-item-id="{{ $item->id }}">
                                                 @csrf
                                                 @method('PUT')
-                                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="form-input w-16 text-center text-sm py-1">
+                                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->variant ? $item->variant->stock : $item->product->stock }}" class="form-input w-16 text-center text-sm py-1 cart-qty-input">
                                             </form>
                                             <form method="POST" action="{{ route('cart.remove', $item) }}" onsubmit="return confirm('Retirer ce produit ?')">
                                                 @csrf
@@ -65,6 +72,12 @@
                                             </form>
                                         </div>
                                     </div>
+                                    <div class="mt-2 text-right">
+                                        <span class="text-sm font-semibold text-gray-700">Sous-total: </span>
+                                        <span class="text-sm font-bold text-gold-600 cart-item-subtotal" data-item-id="{{ $item->id }}">
+                                            {{ number_format($item->subtotal, 0, ',', ' ') }} FCFA
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -74,7 +87,7 @@
                             <h3 class="font-bold text-lg">Récapitulatif</h3>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-500">Sous-total</span>
-                                <span class="font-semibold">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
+                                <span class="font-semibold cart-total-value">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-500">Livraison</span>
@@ -83,7 +96,7 @@
                             <div class="border-t border-gray-100 pt-4">
                                 <div class="flex justify-between text-lg font-bold">
                                     <span>Total</span>
-                                    <span class="text-gold-600">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
+                                    <span class="text-gold-600 cart-total-value">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
                                 </div>
                             </div>
                             <a href="{{ route('checkout.index') }}" class="btn btn-primary w-full">Valider ma sélection</a>
@@ -99,3 +112,67 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+            document.querySelectorAll('.cart-qty-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const form = this.closest('.cart-update-form');
+                    const itemId = form.dataset.itemId;
+                    const quantity = parseInt(this.value) || 1;
+                    const originalValue = this.value;
+
+                    this.disabled = true;
+
+                    const formData = new FormData();
+                    formData.append('_token', csrfToken);
+                    formData.append('_method', 'PUT');
+                    formData.append('quantity', quantity);
+
+                    fetch(`{{ url('/panier/item') }}/${itemId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        credentials: 'same-origin',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const subtotalEl = document.querySelector(`.cart-item-subtotal[data-item-id="${itemId}"]`);
+                            if (subtotalEl && data.item_subtotal !== undefined) {
+                                subtotalEl.textContent = new Intl.NumberFormat('fr-FR').format(data.item_subtotal) + ' FCFA';
+                            }
+                            if (data.cart_total !== undefined) {
+                                document.querySelectorAll('.cart-total-value').forEach(el => {
+                                    el.textContent = new Intl.NumberFormat('fr-FR').format(data.cart_total) + ' FCFA';
+                                });
+                            }
+                            if (data.items_count !== undefined) {
+                                document.querySelectorAll('.cart-items-count').forEach(el => {
+                                    el.textContent = data.items_count + ' article(s) dans votre panier';
+                                });
+                            }
+                        } else {
+                            this.value = originalValue;
+                            alert(data.message || 'Erreur lors de la mise à jour.');
+                        }
+                    })
+                    .catch(() => {
+                        this.value = originalValue;
+                        alert('Erreur lors de la mise à jour.');
+                    })
+                    .finally(() => {
+                        this.disabled = false;
+                    });
+                });
+            });
+        });
+    </script>
+@endpush
