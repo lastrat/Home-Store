@@ -18,7 +18,7 @@
                     Découvrez notre collection exclusive de mode et décoration. Un style raffiné pour une vie chic.
                 </p>
                 <div class="flex flex-wrap gap-4 fade-in" style="animation-delay: 0.3s">
-                    <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
+                    <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
                         Découvrir le Catalogue
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -50,7 +50,7 @@
                 @endforelse
             </div>
             <div class="text-center mt-12">
-                <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
+                <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
                     Voir tout le catalogue
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
