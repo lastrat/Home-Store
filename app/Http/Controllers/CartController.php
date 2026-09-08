@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Wishlist;
+use App\Models\StockAlert;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +17,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
-        $cart->load('items.product.category');
+        $cart->load('items.product.category', 'items.variant');
 
         return view('cart.index', compact('cart'));
     }
@@ -23,25 +25,53 @@ class CartController extends Controller
     public function add(Request $request, Product $product)
     {
         $request->validate([
-            'quantity' => 'nullable|integer|min:1|max:' . $product->stock,
+            'quantity' => 'nullable|integer|min:1',
+            'variant_id' => 'nullable|exists:product_variants,id',
         ]);
 
         $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
-        $item = $cart->items()->where('product_id', $product->id)->first();
+        $variantId = $request->variant_id;
 
-        $quantity = $request->quantity ?? 1;
+        if ($variantId) {
+            $variant = ProductVariant::where('id', $variantId)
+                ->where('product_id', $product->id)
+                ->firstOrFail();
 
-        if ($item) {
-            $newQty = $item->quantity + $quantity;
-            if ($newQty > $product->stock) {
-                return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
+            $item = $cart->items()->where('product_variant_id', $variantId)->first();
+            $quantity = $request->quantity ?? 1;
+
+            if ($item) {
+                $newQty = $item->quantity + $quantity;
+                if ($newQty > $variant->stock) {
+                    return $this->jsonOrBack('Stock insuffisant pour ce variant.', 'error', 422);
+                }
+                $item->update(['quantity' => $newQty]);
+            } else {
+                if ($variant->stock < $quantity) {
+                    return $this->jsonOrBack('Stock insuffisant pour ce variant.', 'error', 422);
+                }
+                $cart->items()->create([
+                    'product_id' => $product->id,
+                    'product_variant_id' => $variantId,
+                    'quantity' => $quantity,
+                ]);
             }
-            $item->update(['quantity' => $newQty]);
         } else {
-            if ($product->stock < $quantity) {
-                return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
+            $item = $cart->items()->where('product_id', $product->id)->whereNull('product_variant_id')->first();
+            $quantity = $request->quantity ?? 1;
+
+            if ($item) {
+                $newQty = $item->quantity + $quantity;
+                if ($newQty > $product->stock) {
+                    return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
+                }
+                $item->update(['quantity' => $newQty]);
+            } else {
+                if ($product->stock < $quantity) {
+                    return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
+                }
+                $cart->items()->create(['product_id' => $product->id, 'quantity' => $quantity]);
             }
-            $cart->items()->create(['product_id' => $product->id, 'quantity' => $quantity]);
         }
 
         $cartCount = $cart->items()->sum('quantity');
@@ -52,8 +82,14 @@ class CartController extends Controller
     public function update(Request $request, CartItem $item)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1|max:' . $item->product->stock,
+            'quantity' => 'required|integer|min:1',
         ]);
+
+        $stock = $item->variant ? $item->variant->stock : $item->product->stock;
+
+        if ($request->quantity > $stock) {
+            return $this->jsonOrBack('Stock insuffisant.', 'error', 422);
+        }
 
         $item->update(['quantity' => $request->quantity]);
 

@@ -45,6 +45,11 @@ class Product extends Model
         return $this->hasMany(StockAlert::class);
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
     public function getImagesAttribute(): array
     {
         return array_filter([$this->image1, $this->image2, $this->image3]);
@@ -52,6 +57,6 @@ class Product extends Model
 
     public function getIsOutOfStockAttribute(): bool
     {
-        return $this->stock <= 0;
+        return $this->stock <= 0 && $this->variants()->where('stock', '>', 0)->doesntExist();
     }
 }

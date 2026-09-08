@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartItem extends Model
 {
-    protected $fillable = ['cart_id', 'product_id', 'quantity'];
+    protected $fillable = ['cart_id', 'product_id', 'product_variant_id', 'quantity'];
 
     protected $casts = [
         'quantity' => 'integer',
@@ -23,8 +23,15 @@ class CartItem extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function variant(): BelongsTo
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
+
     public function getSubtotalAttribute(): float
     {
-        return $this->product->price * $this->quantity;
+        $price = $this->variant ? $this->product->price + $this->variant->price_adjustment : $this->product->price;
+
+        return $price * $this->quantity;
     }
 }

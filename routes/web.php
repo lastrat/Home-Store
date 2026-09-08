@@ -13,6 +13,17 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/create-storage-link', function () {
+    try {
+        Artisan::call('storage:link');
+
+        return '<h2>Storage link created successfully!</h2>';
+    } catch (\Exception $e) {
+        return '<h2>Error:</h2><pre>' . $e->getMessage() . '</pre>';
+    }
+});
 
 /*
 |--------------------------------------------------------------------------

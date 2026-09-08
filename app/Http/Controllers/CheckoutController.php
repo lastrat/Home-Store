@@ -17,7 +17,7 @@ class CheckoutController extends Controller
     public function index()
     {
         $cart = Cart::where('user_id', auth()->id())->firstOrFail();
-        $cart->load('items.product.category');
+        $cart->load('items.product.category', 'items.variant');
 
         if ($cart->items->isEmpty()) {
             return redirect()->route('catalog.index')->with('error', 'Votre panier est vide.');
@@ -33,7 +33,7 @@ class CheckoutController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        $cart = Cart::where('user_id', auth()->id())->with('items.product')->firstOrFail();
+        $cart = Cart::where('user_id', auth()->id())->with('items.product', 'items.variant')->firstOrFail();
 
         if ($cart->items->isEmpty()) {
             return redirect()->route('catalog.index')->with('error', 'Votre panier est vide.');
@@ -51,19 +51,22 @@ class CheckoutController extends Controller
         ]);
 
         foreach ($cart->items as $item) {
+            $price = $item->variant ? $item->product->price + $item->variant->price_adjustment : $item->product->price;
+
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,
-                'product_name' => $item->product->name,
-                'product_price' => $item->product->price,
+                'product_variant_id' => $item->product_variant_id,
+                'product_name' => $item->product->name . ($item->variant ? ' (' . trim(($item->variant->size ? $item->variant->size . ' / ' : '') . ($item->variant->color ? $item->variant->color . ' / ' : '') . ($item->variant->material ? $item->variant->material : ''), ' / ') . ')' : ''),
+                'product_price' => $price,
                 'quantity' => $item->quantity,
-                'subtotal' => $item->subtotal,
+                'subtotal' => $price * $item->quantity,
             ]);
 
-            $product = $item->product;
-            $product->decrement('stock', $item->quantity);
-            if ($product->stock <= 0) {
-                $product->update(['badge' => 'bientot_epuise']);
+            if ($item->variant) {
+                $item->variant->decrement('stock', $item->quantity);
+            } else {
+                $item->product->decrement('stock', $item->quantity);
             }
         }
 
@@ -78,7 +81,7 @@ class CheckoutController extends Controller
             abort(403);
         }
 
-        $order->load('items.product');
+        $order->load('items.product', 'items.variant', 'user');
 
         return view('checkout.receipt', compact('order'));
     }
@@ -89,7 +92,7 @@ class CheckoutController extends Controller
             abort(403);
         }
 
-        $order->load('items.product', 'user');
+        $order->load('items.product', 'items.variant', 'user');
 
         $pdf = Pdf::loadView('checkout.receipt-pdf', compact('order'))
             ->setPaper('A4', 'portrait');

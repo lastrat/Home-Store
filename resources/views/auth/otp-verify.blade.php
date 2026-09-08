@@ -3,7 +3,7 @@
 @section('title', 'Vérification OTP - Home Store')
 
 @section('content')
-    <section class="min-h-screen flex items-center justify-center bg-gray-50 py-12">
+    <section class="min-h-screen flex items-center justify-center bg-gray-50 py-12" style="margin-top: 50px;">
         <div class="max-w-md w-full mx-auto px-4">
             <div class="text-center mb-8">
                 <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
