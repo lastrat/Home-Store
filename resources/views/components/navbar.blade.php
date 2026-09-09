@@ -2,12 +2,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                <div class="w-10 h-10 overflow-hidden flex-shrink-0">
                     <img src="{{ asset('logo/blznc@3x-8.png') }}" alt="Home Store" class="w-full h-full object-cover">
-                </div>
-                <div>
-                    <span class="text-lg font-bold text-white tracking-tight">Home Store</span>
-                    <span class="block text-xs text-gold-300 font-medium -mt-0.5">Chic Living</span>
                 </div>
             </a>
 
