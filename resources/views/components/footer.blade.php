@@ -3,15 +3,8 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="text-lg font-bold">Home Store</span>
-                        <span class="block text-xs text-gold-300 font-medium -mt-0.5">Chic Living</span>
+                    <div class="h-10 w-10">
+                        <img src="{{ asset('logo/blznc@3x-8.png') }}" alt="Home Store" class="h-full w-full object-cover">
                     </div>
                 </div>
                 <p class="text-gray-400 text-sm leading-relaxed max-w-md">
