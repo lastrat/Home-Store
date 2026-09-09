@@ -52,7 +52,6 @@
                                                     {{ $item->variant->material ? $item->variant->material : '' }}
                                                 </p>
                                             @endif
-                                            <p class="text-gold-600 font-bold mt-1">{{ number_format($item->product->price, 0, ',', ' ') }} FCFA</p>
                                         </div>
                                         <div class="flex items-center gap-3">
                                             <form method="POST" action="{{ route('cart.update', $item) }}" class="flex items-center gap-2 cart-update-form" data-item-id="{{ $item->id }}">

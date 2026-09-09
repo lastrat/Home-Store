@@ -21,7 +21,6 @@
                         <div class="flex-1">
                             <h3 class="font-semibold mb-1">{{ $alert->product->name }}</h3>
                             <p class="text-sm text-gray-500">{{ $alert->product->category->name }}</p>
-                            <p class="text-gold-600 font-bold mt-1">{{ number_format($alert->product->price, 0, ',', ' ') }} FCFA</p>
                         </div>
                         <div>
                             <span class="badge badge-warning">Rupture de stock</span>

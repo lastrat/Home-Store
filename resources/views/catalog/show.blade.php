@@ -73,10 +73,6 @@
 
                     <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-gray-900">{{ $product->name }}</h1>
 
-                    <div class="flex items-baseline gap-3 mb-6">
-                        <p class="text-4xl font-bold text-gold-600">{{ number_format($product->price, 0, ',', ' ') }} FCFA</p>
-                    </div>
-
                     <div class="prose prose-sm text-gray-600 mb-8 leading-relaxed">
                         {{ $product->description }}
                     </div>

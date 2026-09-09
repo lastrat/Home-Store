@@ -31,17 +31,16 @@
             </button>
         </div>
     </div>
-    <div class="p-5">
-        <p class="text-xs text-gold-600 font-medium uppercase tracking-wider mb-1">{{ $product->category->name ?? '' }}</p>
-        <h3 class="font-semibold text-base mb-2 line-clamp-2">{{ $product->name }}</h3>
-        <div class="flex items-center justify-between">
-            <p class="text-lg font-bold text-gray-900">{{ number_format($product->price, 0, ',', ' ') }} FCFA</p>
-            @if($product->stock > 0)
-                <a href="{{ route('catalog.show', $product) }}" class="btn btn-primary btn-sm">Voir</a>
-            @else
-                <button class="btn btn-outline btn-sm border-brand-red text-brand-red" disabled>Épuisé</button>
-            @endif
+        <div class="p-5">
+            <p class="text-xs text-gold-600 font-medium uppercase tracking-wider mb-1">{{ $product->category->name ?? '' }}</p>
+            <h3 class="font-semibold text-base mb-2 line-clamp-2">{{ $product->name }}</h3>
+            <div class="flex items-center justify-between">
+                @if($product->stock > 0)
+                    <a href="{{ route('catalog.show', $product) }}" class="btn btn-primary btn-sm">Voir</a>
+                @else
+                    <button class="btn btn-outline btn-sm border-brand-red text-brand-red" disabled>Épuisé</button>
+                @endif
+            </div>
         </div>
-    </div>
 </div>
 
