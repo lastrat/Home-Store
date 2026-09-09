@@ -71,12 +71,12 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="mt-2 text-right">
+                                    {{-- <div class="mt-2 text-right">
                                         <span class="text-sm font-semibold text-gray-700">Sous-total: </span>
                                         <span class="text-sm font-bold text-gold-600 cart-item-subtotal" data-item-id="{{ $item->id }}">
                                             {{ number_format($item->subtotal, 0, ',', ' ') }} FCFA
                                         </span>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         @endforeach
@@ -84,7 +84,7 @@
                     <div>
                         <div class="card p-6 space-y-4 sticky top-28">
                             <h3 class="font-bold text-lg">Récapitulatif</h3>
-                            <div class="flex justify-between text-sm">
+                            {{-- <div class="flex justify-between text-sm">
                                 <span class="text-gray-500">Sous-total</span>
                                 <span class="font-semibold cart-total-value">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
                             </div>
@@ -97,7 +97,7 @@
                                     <span>Total</span>
                                     <span class="text-gold-600 cart-total-value">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <a href="{{ route('checkout.index') }}" class="btn btn-primary w-full">Valider ma sélection</a>
                             <a href="{{ route('catalog.index') }}" class="btn btn-ghost w-full">Continuer mes achats</a>
                             <form method="POST" action="{{ route('cart.clear') }}" onsubmit="return confirm('Vider le panier ?')">
