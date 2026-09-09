@@ -9,6 +9,7 @@
                 <div>
                     <h1 class="text-3xl font-bold">Commandes</h1>
                     <p class="text-gray-500">Gestion des commandes</p>
+                    <div class="w-12 h-1 bg-brand-red mt-3"></div>
                 </div>
             </div>
         </div>
@@ -81,7 +82,7 @@
                                     <td class="text-sm">{{ $order->created_at->format('d/m/Y') }}</td>
                                     <td class="font-semibold">{{ number_format($order->total, 0, ',', ' ') }} FCFA</td>
                                     <td>
-                                        <span class="badge badge-gold">{{ match($order->status) { 'en_attente' => 'En attente', 'valide' => 'Validé', 'paye' => 'Payé', 'recupere' => 'Récupéré', 'annule' => 'Annulé', default => $order->status } }}</span>
+                                        <span class="badge {{ match($order->status) { 'en_attente' => 'badge-warning', 'valide' => 'bg-blue-100 text-blue-700', 'paye' => 'bg-green-100 text-green-700', 'recupere' => 'bg-green-100 text-green-700', 'annule' => 'bg-red-100 text-brand-red', default => 'badge-gold' } }}">{{ match($order->status) { 'en_attente' => 'En attente', 'valide' => 'Validé', 'paye' => 'Payé', 'recupere' => 'Récupéré', 'annule' => 'Annulé', default => $order->status } }}</span>
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-outline">Voir</a>
@@ -103,7 +104,7 @@
                                         <p class="font-mono text-xs font-bold text-gray-500 mb-1">Commande</p>
                                         <p class="font-mono font-bold text-sm">{{ $order->order_number }}</p>
                                     </div>
-                                    <span class="badge badge-gold text-xs">{{ match($order->status) { 'en_attente' => 'En attente', 'valide' => 'Validé', 'paye' => 'Payé', 'recupere' => 'Récupéré', 'annule' => 'Annulé', default => $order->status } }}</span>
+                                    <span class="badge {{ match($order->status) { 'en_attente' => 'badge-warning', 'valide' => 'bg-blue-100 text-blue-700', 'paye' => 'bg-green-100 text-green-700', 'recupere' => 'bg-green-100 text-green-700', 'annule' => 'bg-red-100 text-brand-red', default => 'badge-gold' } }} text-xs">{{ match($order->status) { 'en_attente' => 'En attente', 'valide' => 'Validé', 'paye' => 'Payé', 'recupere' => 'Récupéré', 'annule' => 'Annulé', default => $order->status } }}</span>
                                 </div>
                                 <div class="space-y-2 text-sm">
                                     <div class="flex justify-between">
@@ -165,3 +166,4 @@
         });
     </script>
 @endpush
+

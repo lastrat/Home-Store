@@ -9,6 +9,7 @@
                 <div>
                     <h1 class="text-3xl sm:text-4xl font-bold mb-2">Mon Catalogue</h1>
                     <p class="text-gray-500">Découvrez notre collection exclusive</p>
+                    <div class="w-12 h-1 bg-brand-red mt-3"></div>
                 </div>
                 <form method="GET" action="{{ route('catalog.index') }}" class="flex gap-2">
                     <input type="text" name="search" value="{{ request('search') }}" class="form-input" placeholder="Rechercher..." style="min-width: 200px;">
@@ -142,3 +143,4 @@
         </div>
     </section>
 @endsection
+
