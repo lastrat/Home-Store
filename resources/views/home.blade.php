@@ -9,7 +9,7 @@
             <div class="max-w-2xl">
                 <!-- <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/20 mb-6 fade-in">
                     <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
-                    <span class="text-gold-300 text-sm font-medium">Collection Exclusive 2026</span>
+                    <span class="text-gold-400 text-sm font-medium">Collection Exclusive 2026</span>
                 </div> -->
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 fade-in" style="animation-delay: 0.1s">
                     L'Élégance <span class="text-gradient">Chic</span> <br>chez Vous

@@ -78,9 +78,9 @@
             <div class="border-t border-white/10 my-2"></div>
             @guest
                 <a href="{{ route('login') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Connexion</a>
-                <a href="{{ route('register') }}" class="block px-4 py-3 text-gold-300 font-medium rounded-xl hover:bg-white/5">Accéder au Catalogue</a>
+                <a href="{{ route('register') }}" class="block px-4 py-3 text-gold-400 font-medium rounded-xl hover:bg-white/5">Accéder au Catalogue</a>
             @else
-                <a href="{{ route('catalog.index') }}" class="block px-4 py-3 text-gold-300 font-medium rounded-xl hover:bg-white/5">Mon Catalogue</a>
+                <a href="{{ route('catalog.index') }}" class="block px-4 py-3 text-gold-400 font-medium rounded-xl hover:bg-white/5">Mon Catalogue</a>
                 <a href="{{ route('cart.index') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Mon Panier</a>
                 <a href="{{ route('account.index') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Mon Compte</a>
                 <form method="POST" action="{{ route('logout') }}" class="block">

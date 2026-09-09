@@ -7,7 +7,7 @@
         <div class="max-w-lg w-full mx-auto px-4">
             <div class="text-center mb-8">
                 <a href="{{ route('home') }}" class="inline-flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
