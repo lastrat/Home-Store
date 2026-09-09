@@ -39,7 +39,7 @@
             @if($product->stock > 0)
                 <a href="{{ route('catalog.show', $product) }}" class="btn btn-primary btn-sm">Voir</a>
             @else
-                <button class="btn btn-outline btn-sm" disabled>Épuisé</button>
+                <button class="btn btn-outline btn-sm border-brand-red text-brand-red" disabled>Épuisé</button>
             @endif
         </div>
     </div>
