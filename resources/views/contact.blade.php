@@ -6,9 +6,10 @@
     <section class="pt-32 pb-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center">
-                <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Contactez-nous</span>
-                <h1 class="text-4xl sm:text-5xl font-bold mt-2 mb-6">Restons en <span class="text-gradient">Contact</span></h1>
-                <p class="text-lg text-gray-500 leading-relaxed">Une question, une demande spécifique ou simplement envie de dire bonjour ? Nous sommes à votre écoute.</p>
+                <span class="text-brand-red font-semibold text-sm uppercase tracking-wider">Contactez-nous</span>
+                <h1 class="text-4xl sm:text-5xl font-bold mt-2 mb-4 text-gray-900">Restons en <span class="text-gradient">Contact</span></h1>
+                <div class="w-16 h-1 bg-brand-red mx-auto mb-6"></div>
+                <p class="text-xl text-gray-600 leading-relaxed">Une question, une demande spécifique ou simplement envie de dire bonjour ? Nous sommes à votre écoute.</p>
             </div>
         </div>
     </section>
@@ -56,7 +57,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-sm">Adresse</h4>
-                                    <p class="text-gray-500 text-sm">Cocody, Rue des Jardins, Abidjan</p>
+                                    <p class="text-gray-500 text-sm">Akwa Nord, Douala, Cameroun</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
@@ -67,7 +68,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-sm">Téléphone</h4>
-                                    <p class="text-gray-500 text-sm">+225 01 00 00 00 00</p>
+                                    <a href="tel:+237699822901" class="text-brand-red hover:underline text-sm">+237 6 99 82 29 01</a>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
@@ -79,7 +80,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-sm">Email</h4>
-                                    <p class="text-gray-500 text-sm">contact@homestore.ci</p>
+                                    <a href="mailto:contact@hs-chicliving.com" class="text-brand-red hover:underline text-sm">contact@hs-chicliving.com</a>
                                 </div>
                             </div>
                         </div>
