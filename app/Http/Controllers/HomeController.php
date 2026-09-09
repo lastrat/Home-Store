@@ -11,33 +11,39 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $featuredProducts = Product::where('is_featured', true)
-            ->where('is_active', true)
-            ->where('stock', '>', 0)
-            ->with('category')
-            ->latest()
-            ->take(8)
-            ->get();
+        if (auth()->check()) {
+            $featuredProducts = Product::where('is_featured', true)
+                ->where('is_active', true)
+                ->where('stock', '>', 0)
+                ->with('category')
+                ->latest()
+                ->take(8)
+                ->get();
 
-        $newProducts = Product::where('is_active', true)
-            ->where('stock', '>', 0)
-            ->whereHas('category', function ($q) {
-                $q->where('family', 'mode');
-            })
-            ->with('category')
-            ->latest()
-            ->take(4)
-            ->get();
+            $newProducts = Product::where('is_active', true)
+                ->where('stock', '>', 0)
+                ->whereHas('category', function ($q) {
+                    $q->where('family', 'mode');
+                })
+                ->with('category')
+                ->latest()
+                ->take(4)
+                ->get();
 
-        $decoProducts = Product::where('is_active', true)
-            ->where('stock', '>', 0)
-            ->whereHas('category', function ($q) {
-                $q->where('family', 'decoration');
-            })
-            ->with('category')
-            ->latest()
-            ->take(4)
-            ->get();
+            $decoProducts = Product::where('is_active', true)
+                ->where('stock', '>', 0)
+                ->whereHas('category', function ($q) {
+                    $q->where('family', 'decoration');
+                })
+                ->with('category')
+                ->latest()
+                ->take(4)
+                ->get();
+        } else {
+            $featuredProducts = collect();
+            $newProducts = collect();
+            $decoProducts = collect();
+        }
 
         return view('home', compact('featuredProducts', 'newProducts', 'decoProducts'));
     }

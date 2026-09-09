@@ -12,11 +12,11 @@
                     <span class="text-gold-400 text-sm font-medium">Collection Exclusive 2026</span>
                 </div> -->
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-2 fade-in" style="animation-delay: 0.1s">
-                    L'Élégance <span class="text-gradient">Chic</span> <br>chez Vous
+                    Chez   <span class="text-gradient">nous,</span> <br>on ne vend pas. On accueille.
                 </h1>
                 <div class="w-16 h-1 bg-brand-red mb-6 fade-in" style="animation-delay: 0.15s"></div>
                 <p class="text-lg text-gray-300 mb-8 max-w-lg fade-in" style="animation-delay: 0.2s">
-                    Découvrez notre collection exclusive de mode et décoration. Un style raffiné pour une vie chic.
+                    La mode et la décoration s'invitent chez vous - pour un style qui a tout du raffinement. 
                 </p>
                 <div class="flex flex-wrap gap-4 fade-in" style="animation-delay: 0.3s">
                     <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
@@ -26,8 +26,8 @@
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
                     </a>
-                    <a href="{{ route('concept') }}" class="btn btn-outline btn-lg text-white border-white/30 hover:bg-white hover:text-black">
-                        Notre Concept
+                    <a href="{{ route('contact') }}" class="btn btn-outline btn-lg text-white border-white/30 hover:bg-white hover:text-black">
+                        Contactez Nous
                     </a>
                 </div>
             </div>
@@ -36,60 +36,79 @@
 
     <section class="section bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Catalogue Privé</span>
-                <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-4">Nos Incontournables</h2>
-                <p class="text-gray-500 max-w-xl mx-auto">Une sélection raffinée de nos pièces favorites, disponibles exclusivement pour nos clients inscrits.</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                @forelse($featuredProducts as $product)
-                    @include('components.product-card', ['product' => $product])
-                @empty
-                    <div class="col-span-full text-center py-16">
-                        <p class="text-gray-400">Aucun produit en vedette pour le moment.</p>
-                    </div>
-                @endforelse
-            </div>
-            <div class="text-center mt-12">
-                <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
-                    Voir tout le catalogue
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </a>
-            </div>
+            @auth
+                <div class="text-center mb-12">
+                    <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Catalogue Privé</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-4">Nos Incontournables</h2>
+                    <p class="text-gray-500 max-w-xl mx-auto">Une sélection raffinée de nos pièces favorites, disponibles exclusivement pour nos clients inscrits.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @forelse($featuredProducts as $product)
+                        @include('components.product-card', ['product' => $product])
+                    @empty
+                        <div class="col-span-full text-center py-16">
+                            <p class="text-gray-400">Aucun produit en vedette pour le moment.</p>
+                        </div>
+                    @endforelse
+                </div>
+                <div class="text-center mt-12">
+                    <a href="{{ route('catalog.index') }}" class="btn btn-primary btn-lg">
+                        Voir tout le catalogue
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            @else
+                <div class="text-center py-16">
+                    <p class="text-gray-500 mb-6">Connectez-vous pour découvrir notre catalogue privé.</p>
+                    <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
+                        Accéder au Catalogue
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            @endauth
         </div>
     </section>
 
     <section class="section bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Nouveautés Mode</span>
-                    <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-6">Dernières Tendances</h2>
-                    <p class="text-gray-500 mb-8">Les pièces qui définissent la saison. Des coupes modernes, des matières nobles, un style incomparable.</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        @forelse($newProducts as $product)
-                            @include('components.product-card', ['product' => $product])
-                        @empty
-                            <p class="text-gray-400 col-span-2">Aucun produit pour le moment.</p>
-                        @endforelse
+            @auth
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Nouveautés Mode</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-6">Dernières Tendances</h2>
+                        <p class="text-gray-500 mb-8">Les pièces qui définissent la saison. Des coupes modernes, des matières nobles, un style incomparable.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            @forelse($newProducts as $product)
+                                @include('components.product-card', ['product' => $product])
+                            @empty
+                                <p class="text-gray-400 col-span-2">Aucun produit pour le moment.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Décoration</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-6">Ambiance & Design</h2>
+                        <p class="text-gray-500 mb-8">Transformez votre intérieur avec nos pièces de décoration soigneusement sélectionnées pour un chic authentique.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            @forelse($decoProducts as $product)
+                                @include('components.product-card', ['product' => $product])
+                            @empty
+                                <p class="text-gray-400 col-span-2">Aucun produit pour le moment.</p>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Décoration</span>
-                    <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-6">Ambiance & Design</h2>
-                    <p class="text-gray-500 mb-8">Transformez votre intérieur avec nos pièces de décoration soigneusement sélectionnées pour un chic authentique.</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        @forelse($decoProducts as $product)
-                            @include('components.product-card', ['product' => $product])
-                        @empty
-                            <p class="text-gray-400 col-span-2">Aucun produit pour le moment.</p>
-                        @endforelse
-                    </div>
+            @else
+                <div class="text-center py-16">
+                    <p class="text-gray-500">Connectez-vous pour découvrir nos nouveautés et notre collection décoration.</p>
                 </div>
-            </div>
+            @endauth
         </div>
     </section>
 
