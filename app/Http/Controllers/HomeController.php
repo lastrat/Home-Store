@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\HeroSlide;
 use App\Models\Product;
 use App\Models\Neighborhood;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $heroSlides = HeroSlide::active()->ordered()->get();
+
         if (auth()->check()) {
             $featuredProducts = Product::where('is_featured', true)
                 ->where('is_active', true)
@@ -45,7 +48,7 @@ class HomeController extends Controller
             $decoProducts = collect();
         }
 
-        return view('home', compact('featuredProducts', 'newProducts', 'decoProducts'));
+        return view('home', compact('heroSlides', 'featuredProducts', 'newProducts', 'decoProducts'));
     }
 
     public function concept()

@@ -1,38 +1,118 @@
 @extends('layouts.app')
 
-@section('title', 'Home Store - Chic Living')
+@section('title', 'Home Store - Chic Living | Mode et Décoration Haut de Gamme')
+@section('meta_description', 'Découvrez Home Store - Chic Living, votre maison-boutique de mode et décoration à Abidjan. Vente en boutique, en ligne et à domicile. Collections exclusives de vêtements, accessoires et décoration intérieure.')
+@section('meta_keywords', 'home store, chic living, mode Abidjan, décoration intérieure, boutique mode, vêtements homme femme, accessoires mode, design intérieur, luxe accessible, Abidjan shopping')
+@section('canonical_url', route('home'))
+@section('og_title', 'Home Store - Chic Living | Mode et Décoration Haut de Gamme')
+@section('og_description', 'Découvrez Home Store - Chic Living, votre maison-boutique de mode et décoration à Abidjan. Vente en boutique, en ligne et à domicile.')
+@section('og_image', asset('logo/logo100 hs.jpg'))
+@section('twitter_title', 'Home Store - Chic Living | Mode et Décoration Haut de Gamme')
+@section('twitter_description', 'Découvrez Home Store - Chic Living, votre maison-boutique de mode et décoration à Abidjan.')
+@section('twitter_image', asset('logo/logo100 hs.jpg'))
+@section('json_ld', json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Store',
+    'name' => 'Home Store - Chic Living',
+    'description' => 'Maison-boutique dédiée à la mode et à la décoration intérieure',
+    'url' => config('app.url'),
+    'logo' => asset('logo/logo100 hs.jpg'),
+    'image' => asset('logo/logo100 hs.jpg'),
+    'telephone' => '',
+    'address' => [
+        '@type' => 'PostalAddress',
+        'addressLocality' => 'Abidjan',
+        'addressCountry' => 'CI'
+    ],
+    'openingHoursSpecification' => [
+        '@type' => 'OpeningHoursSpecification',
+        'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        'opens' => '09:00',
+        'closes' => '19:00'
+    ],
+    'sameAs' => []
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
 
 @section('content')
-    <section class="hero" style="margin-top: 75px;">
-        <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80');"></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="max-w-2xl">
-                <!-- <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/20 mb-6 fade-in">
-                    <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
-                    <span class="text-gold-400 text-sm font-medium">Collection Exclusive 2026</span>
-                </div> -->
-                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-2 fade-in" style="animation-delay: 0.1s">
-                    Chez   <span class="text-gradient">nous,</span> <br>on ne vend pas. On accueille.
-                </h1>
-                <div class="w-16 h-1 bg-brand-red mb-6 fade-in" style="animation-delay: 0.15s"></div>
-                <p class="text-lg text-gray-300 mb-8 max-w-lg fade-in" style="animation-delay: 0.2s">
-                    La mode et la décoration s'invitent chez vous - pour un style qui a tout du raffinement. 
-                </p>
-                <div class="flex flex-wrap gap-4 fade-in" style="animation-delay: 0.3s">
-                    <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
-                        Découvrir le Catalogue
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
-                    <a href="{{ route('contact') }}" class="btn btn-outline btn-lg text-white border-white/30 hover:bg-white hover:text-black">
-                        Contactez Nous
-                    </a>
+    <!-- Slider Section Hero  -->
+    @if($heroSlides->isNotEmpty())
+        <section class="hero" style="margin-top: 75px;">
+            <div class="swiper hero-swiper h-full">
+                <div class="swiper-wrapper">
+                    @foreach($heroSlides as $slide)
+                        <div class="swiper-slide relative">
+                            <div class="hero-bg absolute inset-0" style="background-image: url('{{ asset('storage/' . $slide->background_image) }}');"></div>
+                            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
+                                <div class="max-w-2xl py-20">
+                                    @if($slide->badge_text)
+                                        <span class="inline-block px-4 py-2 rounded-full bg-brand-red/90 text-white text-sm font-semibold mb-6 fade-in">{{ $slide->badge_text }}</span>
+                                    @endif
+                                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-2 fade-in" style="animation-delay: 0.1s">
+                                        {{ $slide->title }}
+                                    </h1>
+                                    @if($slide->subtitle)
+                                        <div class="w-16 h-1 bg-brand-red mb-6 fade-in" style="animation-delay: 0.15s"></div>
+                                        <p class="text-lg text-gray-300 mb-8 max-w-lg fade-in" style="animation-delay: 0.2s">
+                                            {{ $slide->subtitle }}
+                                        </p>
+                                    @endif
+                                    <div class="fade-in" style="animation-delay: 0.3s">
+                                        @if($slide->button_link)
+                                            <a href="{{ $slide->button_link }}" class="btn btn-primary btn-lg">
+                                                {{ $slide->button_text ?? 'Découvrir' }}
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                                </svg>
+                                            </a>
+                                        @else
+                                            <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
+                                                {{ $slide->button_text ?? 'Découvrir' }}
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                                </svg>
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="swiper-pagination hero-pagination"></div>
+                <div class="swiper-button-prev hero-prev"></div>
+                <div class="swiper-button-next hero-next"></div>
+            </div>
+        </section>
+    @else
+        <section class="hero" style="margin-top: 75px;">
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80');"></div>
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-2xl">
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-2 fade-in" style="animation-delay: 0.1s">
+                        Chez   <span class="text-gradient">nous,</span> <br>on ne vend pas. On accueille.
+                    </h1>
+                    <div class="w-16 h-1 bg-brand-red mb-6 fade-in" style="animation-delay: 0.15s"></div>
+                    <p class="text-lg text-gray-300 mb-8 max-w-lg fade-in" style="animation-delay: 0.2s">
+                        La mode et la décoration s'invitent chez vous - pour un style qui a tout du raffinement. 
+                    </p>
+                    <div class="flex flex-wrap gap-4 fade-in" style="animation-delay: 0.3s">
+                        <a href="{{ auth()->check() ? route('catalog.index') : route('register') }}" class="btn btn-primary btn-lg">
+                            Découvrir le Catalogue
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                        <a href="{{ route('contact') }}" class="btn btn-outline btn-lg text-white border-white/30 hover:bg-white hover:text-black">
+                            Contactez Nous
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     <section class="section bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,9 +155,9 @@
         </div>
     </section>
 
+    @auth
     <section class="section bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            @auth
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div>
                         <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Nouveautés Mode</span>
@@ -104,13 +184,13 @@
                         </div>
                     </div>
                 </div>
-            @else
-                <div class="text-center py-16">
-                    <p class="text-gray-500">Connectez-vous pour découvrir nos nouveautés et notre collection décoration.</p>
-                </div>
-            @endauth
-        </div>
-    </section>
+            </div>
+        </section>
+        @else
+            <!-- <div class="text-center py-16">
+                <p class="text-gray-500">Connectez-vous pour découvrir nos nouveautés et notre collection décoration.</p>
+            </div> -->
+        @endauth
 
     <section class="section bg-brand-dark text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -172,4 +252,73 @@
         </div>
     </section>
 @endsection
+
+@push('styles')
+    <style>
+        .hero-swiper {
+            width: 100%;
+            height: 100vh;
+            min-height: 600px;
+        }
+        .hero-swiper .swiper-slide {
+            position: relative;
+        }
+        .hero-pagination {
+            bottom: 2rem !important;
+        }
+        .hero-pagination .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 1;
+        }
+        .hero-pagination .swiper-pagination-bullet-active {
+            background: #C18E41;
+        }
+        .hero-prev, .hero-next {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+        .hero-prev:hover, .hero-next:hover {
+            color: #E2B156;
+        }
+        .hero-prev {
+            left: 1.5rem !important;
+        }
+        .hero-next {
+            right: 1.5rem !important;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof Swiper !== 'undefined') {
+                new Swiper('.hero-swiper', {
+                    loop: true,
+                    autoplay: {
+                        delay: 5000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    },
+                    pagination: {
+                        el: '.hero-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.hero-next',
+                        prevEl: '.hero-prev',
+                    },
+                    effect: 'fade',
+                    fadeEffect: {
+                        crossFade: true
+                    },
+                    speed: 1000,
+                });
+            }
+        });
+    </script>
+@endpush
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminClientController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminHeroSlideController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AuthController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -38,6 +40,8 @@ Route::get('/create-storage-link', function () {
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/concept', [HomeController::class, 'concept'])->name('concept');
@@ -115,4 +119,11 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
     Route::get('/clients', [AdminClientController::class, 'index'])->name('clients.index');
     Route::get('/clients/{client}', [AdminClientController::class, 'show'])->name('clients.show');
+
+    Route::get('/slides', [AdminHeroSlideController::class, 'index'])->name('hero_slides.index');
+    Route::get('/slides/creer', [AdminHeroSlideController::class, 'create'])->name('hero_slides.create');
+    Route::post('/slides', [AdminHeroSlideController::class, 'store'])->name('hero_slides.store');
+    Route::get('/slides/{hero_slide}/modifier', [AdminHeroSlideController::class, 'edit'])->name('hero_slides.edit');
+    Route::put('/slides/{hero_slide}', [AdminHeroSlideController::class, 'update'])->name('hero_slides.update');
+    Route::delete('/slides/{hero_slide}', [AdminHeroSlideController::class, 'destroy'])->name('hero_slides.destroy');
 });

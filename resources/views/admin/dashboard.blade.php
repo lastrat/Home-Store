@@ -131,6 +131,23 @@
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </a>
+                <a href="{{ route('admin.hero_slides.index') }}" class="card p-6 flex items-center gap-4 hover:border-gold-300 border-2 border-transparent transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-purple-600">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-bold">Slides Hero</p>
+                        <p class="text-sm text-gray-500">Slider page d'accueil</p>
+                    </div>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-gold-600 transition-colors">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
                 </div>
             </div>
 
