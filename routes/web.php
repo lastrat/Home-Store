@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 
+
+Route::get('/clear-cache-temp', function () {
+    Artisan::call('optimize:clear');
+
+    return '<pre>' . Artisan::output() . '</pre>';
+});
+
+
 Route::get('/create-storage-link', function () {
     try {
         Artisan::call('storage:link');
