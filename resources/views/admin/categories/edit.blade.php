@@ -16,11 +16,11 @@
                     @csrf
                     @method('PUT')
                     <div>
-                        <label class="block text-sm font-semibold mb-2">Nom <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-semibold mb-2">Nom <span class="text-brand-red">*</span></label>
                         <input type="text" name="name" class="form-input" required value="{{ old('name', $category->name) }}" placeholder="Ex: Robes">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-2">Famille <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-semibold mb-2">Famille <span class="text-brand-red">*</span></label>
                         <select name="family" class="form-input" required>
                             <option value="mode" {{ old('family', $category->family) == 'mode' ? 'selected' : '' }}>Mode</option>
                             <option value="decoration" {{ old('family', $category->family) == 'decoration' ? 'selected' : '' }}>Décoration</option>
@@ -44,3 +44,4 @@
         </div>
     </section>
 @endsection
+

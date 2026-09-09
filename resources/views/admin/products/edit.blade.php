@@ -40,12 +40,12 @@
                             </h2>
                             <div class="space-y-5">
                                 <div>
-                                    <label class="block text-sm font-semibold mb-2">Nom du produit <span class="text-red-500">*</span></label>
+                                    <label class="block text-sm font-semibold mb-2">Nom du produit <span class="text-brand-red">*</span></label>
                                     <input type="text" name="name" class="form-input" required value="{{ old('name', $product->name) }}" placeholder="Ex: Robe élégante noir">
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-semibold mb-2">Catégorie <span class="text-red-500">*</span></label>
+                                        <label class="block text-sm font-semibold mb-2">Catégorie <span class="text-brand-red">*</span></label>
                                         <select name="category_id" class="form-input" required>
                                             <option value="">Sélectionner...</option>
                                             @foreach($categories as $category)
@@ -58,13 +58,13 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-semibold mb-2">Prix (FCFA) <span class="text-red-500">*</span></label>
+                                        <label class="block text-sm font-semibold mb-2">Prix (FCFA) <span class="text-brand-red">*</span></label>
                                         <input type="number" name="price" step="0.01" class="form-input" required value="{{ old('price', $product->price) }}" placeholder="25000">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-semibold mb-2">Stock <span class="text-red-500">*</span></label>
+                                        <label class="block text-sm font-semibold mb-2">Stock <span class="text-brand-red">*</span></label>
                                         <input type="number" name="stock" class="form-input" required value="{{ old('stock', $product->stock) }}" placeholder="0">
                                     </div>
                                     <div>
@@ -382,3 +382,4 @@
         }
     </script>
 @endpush
+

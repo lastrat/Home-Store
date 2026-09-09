@@ -15,11 +15,11 @@
                 <form method="POST" action="{{ route('admin.categories.store') }}" class="space-y-6">
                     @csrf
                     <div>
-                        <label class="block text-sm font-semibold mb-2">Nom <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-semibold mb-2">Nom <span class="text-brand-red">*</span></label>
                         <input type="text" name="name" class="form-input" required value="{{ old('name') }}" placeholder="Ex: Robes">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold mb-2">Famille <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-semibold mb-2">Famille <span class="text-brand-red">*</span></label>
                         <select name="family" class="form-input" required>
                             <option value="mode" {{ old('family') == 'mode' ? 'selected' : '' }}>Mode</option>
                             <option value="decoration" {{ old('family') == 'decoration' ? 'selected' : '' }}>Décoration</option>
@@ -43,3 +43,4 @@
         </div>
     </section>
 @endsection
+
