@@ -65,7 +65,7 @@
             function showToast(message, type = 'success') {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
-                toast.className = `px-4 py-3 rounded-xl text-sm font-medium shadow-lg transform transition-all duration-300 translate-y-4 opacity-0 ${type === 'success' ? 'bg-gray-900 text-white' : 'bg-red-600 text-white'}`;
+                toast.className = `px-4 py-3 rounded-xl text-sm font-medium shadow-lg transform transition-all duration-300 translate-y-4 opacity-0 ${type === 'success' ? 'bg-brand-dark text-white' : 'bg-red-600 text-white'}`;
                 toast.textContent = message;
                 container.appendChild(toast);
 

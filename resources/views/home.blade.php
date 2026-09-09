@@ -129,7 +129,7 @@
 
     <section class="section bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-gray-900 to-gray-800 p-12 lg:p-16">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-dark to-gray-800 p-12 lg:p-16">
                 <div class="relative z-10 max-w-xl">
                     <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Rejoignez le Club Privé</h2>
                     <p class="text-gray-300 mb-8">Accédez à notre catalogue exclusif, recevez nos offres privilégiées et vivez l'expérience Home Store.</p>

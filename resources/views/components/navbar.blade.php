@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="md:hidden hidden bg-gray-900/95 backdrop-blur-xl border-t border-white/10" id="mobile-menu">
+    <div class="md:hidden hidden bg-brand-dark/95 backdrop-blur-xl border-t border-white/10" id="mobile-menu">
         <div class="px-4 py-4 space-y-1">
             <a href="{{ route('home') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Accueil</a>
             <a href="{{ route('concept') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Concept</a>
@@ -98,9 +98,9 @@
 
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
-                navbar.classList.add('bg-gray-900/80', 'backdrop-blur-xl', 'shadow-lg', 'border-b', 'border-white/5');
+                navbar.classList.add('bg-brand-dark/80', 'backdrop-blur-xl', 'shadow-lg', 'border-b', 'border-white/5');
             } else {
-                navbar.classList.remove('bg-gray-900/80', 'backdrop-blur-xl', 'shadow-lg', 'border-b', 'border-white/5');
+                navbar.classList.remove('bg-brand-dark/80', 'backdrop-blur-xl', 'shadow-lg', 'border-b', 'border-white/5');
             }
         });
 
