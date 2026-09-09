@@ -176,17 +176,17 @@
                         @endif
 
                         @if($hasStock)
-                            <div class="flex gap-2">
-                                <div class="relative">
-                                    <button class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="decrementQty()">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    </button>
-                                    <input type="number" id="qty-{{ $product->id }}" value="1" min="1" max="{{ $product->stock }}" class="form-input w-20 text-center pl-8 pr-8">
-                                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="incrementQty()">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    </button>
-                                </div>
-                                <button class="btn btn-primary cart-add-btn" data-product-id="{{ $product->id }}" {{ $hasVariants ? 'disabled' : '' }}>
+                                <div class="flex gap-2 w-100">
+                                    <div class="relative">
+                                        <button class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="decrementQty()">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </button>
+                                        <input type="number" id="qty-{{ $product->id }}" value="1" min="1" max="{{ $product->stock }}" class="form-input w-32 text-center pl-10 pr-10">
+                                        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="incrementQty()">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        </button>
+                                    </div>
+                                    <button class="btn btn-primary cart-add-btn" data-product-id="{{ $product->id }}" {{ $hasVariants ? 'disabled' : '' }}>
                                     Ajouter au panier
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                         <circle cx="9" cy="21" r="1"></circle>
@@ -324,10 +324,10 @@
                 infoDiv.classList.remove('hidden');
                 document.getElementById('selected-variant-label').textContent = [selectedVariant.size, selectedVariant.color, selectedVariant.material].filter(Boolean).join(' / ') || 'Standard';
                 document.getElementById('selected-variant-stock').textContent = selectedVariant.stock > 0 ? `${selectedVariant.stock} en stock` : 'Rupture de stock';
-                document.getElementById('selected-variant-price').textContent =
-                new Intl.NumberFormat('fr-FR').format(
-                    Number({{ $product->price }}) + Number(selectedVariant.price_adjustment || 0)
-                ) + ' FCFA';
+                // document.getElementById('selected-variant-price').textContent =
+                // new Intl.NumberFormat('fr-FR').format(
+                //     Number({{ $product->price }}) + Number(selectedVariant.price_adjustment || 0)
+                // ) + ' FCFA';
                 document.getElementById('selected-variant-id').value = selectedVariant.id;
                 addBtn.disabled = selectedVariant.stock <= 0;
                 if (qtyInput) qtyInput.max = Math.max(1, selectedVariant.stock);
