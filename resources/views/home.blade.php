@@ -7,10 +7,10 @@
         <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80');"></div>
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="max-w-2xl">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/20 mb-6 fade-in">
+                <!-- <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/20 mb-6 fade-in">
                     <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
                     <span class="text-gold-300 text-sm font-medium">Collection Exclusive 2026</span>
-                </div>
+                </div> -->
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 fade-in" style="animation-delay: 0.1s">
                     L'Élégance <span class="text-gradient">Chic</span> <br>chez Vous
                 </h1>
@@ -92,11 +92,11 @@
         </div>
     </section>
 
-    <section class="section bg-gray-900 text-white">
+    <section class="section bg-brand-dark text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="text-center p-8">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-black">
                             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                             <line x1="7" y1="7" x2="7.01" y2="7"></line>
@@ -106,7 +106,7 @@
                     <p class="text-gray-400 text-sm">Collections exclusives pour homme, femme et maison.</p>
                 </div>
                 <div class="text-center p-8">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-black">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                         </svg>
@@ -115,7 +115,7 @@
                     <p class="text-gray-400 text-sm">Commandez en ligne et récupérez en boutique sous 48h.</p>
                 </div>
                 <div class="text-center p-8">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-400 flex items-center justify-center">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-black">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         </svg>
@@ -142,7 +142,7 @@
                     </a>
                 </div>
                 <div class="absolute right-0 top-0 w-1/2 h-full opacity-20">
-                    <svg viewBox="0 0 200 200" class="w-full h-full text-gold-500">
+                    <svg viewBox="0 0 200 200" class="w-full h-full text-gold-400">
                         <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="0.5"/>
                         <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="0.5"/>
                         <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" stroke-width="0.5"/>

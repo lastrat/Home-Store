@@ -1,4 +1,4 @@
-<nav class="fixed top-0 left-0 right-0 z-50 bg-black transition-all duration-500" id="navbar">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-brand-dark transition-all duration-500" id="navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
@@ -8,11 +8,11 @@
             </a>
 
             <div class="hidden md:flex items-center gap-1">
-                <a href="{{ route('home') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-300 transition-colors rounded-full hover:bg-white/5">Accueil</a>
-                <a href="{{ route('concept') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-300 transition-colors rounded-full hover:bg-white/5">Concept</a>
-                <a href="{{ route('activities') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-300 transition-colors rounded-full hover:bg-white/5">Activités</a>
-                <a href="{{ route('boutique') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-300 transition-colors rounded-full hover:bg-white/5">Boutique</a>
-                <a href="{{ route('contact') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-300 transition-colors rounded-full hover:bg-white/5">Contact</a>
+                <a href="{{ route('home') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Accueil</a>
+                <a href="{{ route('concept') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Concept</a>
+                <a href="{{ route('activities') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Activités</a>
+                <a href="{{ route('boutique') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Boutique</a>
+                <a href="{{ route('contact') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Contact</a>
             </div>
 
             <div class="hidden md:flex items-center gap-3">
