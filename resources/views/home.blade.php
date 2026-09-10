@@ -237,8 +237,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-dark to-gray-800 p-12 lg:p-16">
                 <div class="relative z-10 max-w-xl">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Rejoignez le Club Privé</h2>
-                    <p class="text-gray-300 mb-8">Accédez à notre catalogue exclusif, recevez nos offres privilégiées et vivez l'expérience Home Store.</p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Rejoignez notre communauté</h2>
+                    <p class="text-gray-300 mb-6">Accédez à notre catalogue exclusif, recevez nos offres privilégiées et vivez l'expérience Home Store.</p>
+                    <div class="text-white mb-8">
+                        <span class="text-5xl sm:text-6xl font-bold text-gold-400 counter" data-target="800">0</span>
+                        <p class="text-gray-300 mt-2 text-base sm:text-lg">Déjà <span class="font-semibold text-white counter-text">0</span> personnes ont fait de notre maison la leur. À vous de pousser la porte.</p>
+                    </div>
                     <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
                         Créer mon compte
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -246,13 +250,6 @@
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
                     </a>
-                </div>
-                <div class="absolute right-0 top-0 w-1/2 h-full opacity-20">
-                    <svg viewBox="0 0 200 200" class="w-full h-full text-gold-400">
-                        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="0.5"/>
-                        <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="0.5"/>
-                        <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" stroke-width="0.5"/>
-                    </svg>
                 </div>
             </div>
         </div>
@@ -368,6 +365,54 @@
                     longSwipesRatio: 0.2,
                 });
             }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const counters = document.querySelectorAll('.counter');
+            const duration = 2000;
+
+            const animateCounter = (counter) => {
+                const target = parseInt(counter.getAttribute('data-target'), 10);
+                const textEl = counter.parentElement.querySelector('.counter-text');
+                const start = 0;
+                const startTime = performance.now();
+
+                const updateCounter = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(start + (target - start) * easeOut);
+
+                    counter.textContent = current.toLocaleString('fr-FR');
+                    if (textEl) {
+                        textEl.textContent = current.toLocaleString('fr-FR');
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString('fr-FR');
+                        if (textEl) {
+                            textEl.textContent = target.toLocaleString('fr-FR');
+                        }
+                    }
+                };
+
+                requestAnimationFrame(updateCounter);
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach((counter) => observer.observe(counter));
         });
     </script>
 @endpush
