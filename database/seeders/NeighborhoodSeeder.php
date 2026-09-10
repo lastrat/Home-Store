@@ -11,55 +11,37 @@ class NeighborhoodSeeder extends Seeder
     public function run(): void
     {
         $neighborhoodsByCity = [
-            'Douala' => [
-                'Cocody', 'Plateau', 'Marcory', 'Yopougon', 'Adjamé',
-                'Treichville', 'Koumassi', 'Port-Bouët', 'Abobo', 'Attécoubé',
-                'Bingerville', 'Anyama', 'Songon', 'Brofodoumé'
-            ],
             'Yaoundé' => [
-                'Bastos', 'Essos', 'Mvan', 'Nlongkak', 'Tam-Tam',
-                'Emana', 'Odza', 'Ekounou', 'Nkolbisson', 'Mfoundi'
+                'Emana', 'Etoudi', 'Nlongkak', 'Messassi', 'Tsinga', 'Mokas',
+                'Briqueterie', 'Efoulan', 'Obobogo', 'Ahala', 'Mimboman',
+                'Kondengui', 'Ekounou', 'Essos', 'Mvog-Ada', 'Ngousso',
+                'Biyem-Assi', 'Melen', 'Simbock', 'Nkolbisson'
+            ],
+            'Douala' => [
+                'Akwa', 'Bonanjo', 'Deido', 'Bali', 'New Bell', 'Nkololoun',
+                'Logbaba', 'Ndogpassi', 'Nyalla', 'Bonabéri', 'Mambanda',
+                'Kotto', 'Logpom', 'Makepe', 'Bépanda', 'Manoka'
             ],
             'Bafoussam' => [
-                'Banengo', 'Djeleng', 'Kouogouo', 'Nouvelle Route', 'Ville',
-                'Marché', 'Goulfok', 'Tamdja', 'Bamendzi', 'Mambain'
-            ],
-            'Bamenda' => [
-                'Commercial Avenue', 'Ntambeng', 'Mile 1', 'Mile 2', 'Mile 3',
-                'Mile 4', 'Bamenda Town', 'Nkwen', 'Bafut', 'Mambanda'
-            ],
-            'Kribi' => [
-                'Centre Ville', 'Plage', 'Kribi Ville', 'Mengong', 'Ngoye'
-            ],
-            'Limbe' => [
-                'Limbe Ville', 'Bota', 'Mundemba', 'Idenau', 'Meme'
-            ],
-            'Buea' => [
-                'Buea Town', 'Molyko', 'Bakinge', 'Great Soppo', 'Small Soppo'
+                'Tamja', 'Ndiangdam', 'Baleng', 'Bamougoum'
             ],
             'Garoua' => [
-                'Centre Ville', 'Garoua Ville', 'Marché Central', 'Rural', 'Sakkara'
+                'Lopéré', 'Roumdé Adjia', 'Djamboutou'
+            ],
+            'Bamenda' => [
+                'Mankon', 'Nkwen'
             ],
             'Maroua' => [
-                'Centre Ville', 'Maroua Ville', 'Diamaré', 'Kansé', 'Mokolo'
+                'Kakataré', 'Pitoaré'
             ],
             'Ngaoundéré' => [
-                'Centre Ville', 'Ngaoundéré Ville', 'Mayo-Baléo', 'Demsa', 'Vina'
+                'Baladji'
             ],
-            'Ebolowa' => [
-                'Centre Ville', 'Ebolowa Ville', 'Mvangan', 'Bipindi', 'Meyomessala'
+            'Bertoua' => [
+                'Kano'
             ],
-            'Dschang' => [
-                'Centre Ville', 'Dschang Ville', 'Marché', 'Kékem', 'Santchou'
-            ],
-            'Bafang' => [
-                'Centre Ville', 'Bafang Ville', 'Marché Central', 'Bakou', 'Mbang'
-            ],
-            'Foumban' => [
-                'Centre Ville', 'Foumban Ville', 'Marché', 'Foumban Nord', 'Foumban Sud'
-            ],
-            'Kumba' => [
-                'Centre Ville', 'Kumba Ville', 'Mundemba', 'Meme', 'Manyu'
+            'Buea' => [
+                'Molyko'
             ],
         ];
 
