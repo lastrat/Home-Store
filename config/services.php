@@ -33,6 +33,7 @@ return [
 
     'envoisms' => [
         'api_key' => env('ENVOISMS_API_KEY'),
+        'app_id' => env('ENVOISMS_APP_ID'),
         'base_url' => env('ENVOISMS_BASE_URL', 'https://api.envoisms.ma'),
     ],
 

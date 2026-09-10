@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Neighborhood;
 use App\Models\User;
-use EnvoiSMS\Laravel\Facades\EnvoiSMS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Validator;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -72,10 +72,17 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $otpResponse = EnvoiSMS::sendOtp([
-            'to' => $request->phone,
-            'brand' => 'Home Store',
-        ]);
+        $otpResponse = Http::withToken(config('services.envoisms.api_key'))
+            ->post(config('services.envoisms.base_url').'/v1/verify/send', [
+                'to' => $request->phone,
+                'app_id' => config('services.envoisms.app_id'),
+            ])
+            ->json();
+
+        if (!isset($otpResponse['session_id'])) {
+            return redirect()->route('otp.verify.form', ['phone' => $request->phone])
+                ->with('error', 'Compte créé, mais erreur lors de l\'envoi du SMS de vérification.');
+        }
 
         session([
             'otp_session_id' => $otpResponse['session_id'],
@@ -98,13 +105,20 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
         ]);
 
-        $response = EnvoiSMS::sendOtp([
-            'to' => $request->phone,
-            'brand' => 'Home Store',
-        ]);
+        $response = Http::withToken(config('services.envoisms.api_key'))
+            ->post(config('services.envoisms.base_url').'/v1/verify/send', [
+                'to' => $request->phone,
+                'app_id' => config('services.envoisms.app_id'),
+            ]);
+
+        $data = $response->json();
+
+        if (!isset($data['session_id'])) {
+            return back()->with('error', 'Erreur lors de l\'envoi du code OTP.');
+        }
 
         session([
-            'otp_session_id' => $response['session_id'],
+            'otp_session_id' => $data['session_id'],
             'otp_phone' => $request->phone,
         ]);
 
@@ -125,10 +139,12 @@ class AuthController extends Controller
             return back()->withErrors(['code' => 'Session OTP invalide. Veuillez renvoyer un code.']);
         }
 
-        $result = EnvoiSMS::checkOtp(
-            sessionId: $sessionId,
-            code: $request->code
-        );
+        $result = Http::withToken(config('services.envoisms.api_key'))
+            ->post(config('services.envoisms.base_url').'/v1/verify/check', [
+                'session_id' => $sessionId,
+                'code' => $request->code,
+            ])
+            ->json();
 
         if (!($result['verified'] ?? false)) {
             return back()->withErrors(['code' => 'Code invalide ou expiré.']);
