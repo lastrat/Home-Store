@@ -42,22 +42,22 @@
                     @foreach($heroSlides as $slide)
                         <div class="swiper-slide relative">
                             <div class="hero-bg absolute inset-0" style="background-image: url('{{ asset('storage/' . $slide->background_image) }}');"></div>
-                            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 z-[1]"></div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-black/70  to-black/70 z-[1]"></div>
                             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
-                                <div class="max-w-2xl py-20">
+                                <div class="max-w-2xl py-8 sm:py-20">
                                     @if($slide->badge_text)
-                                        <span class="inline-block px-4 py-2 rounded-full bg-brand-red/90 text-white text-sm font-semibold mb-6 fade-in">{{ $slide->badge_text }}</span>
+                                        <span class="inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-brand-red/90 text-white text-xs sm:text-sm font-semibold mb-4 sm:mb-6 fade-in">{{ $slide->badge_text }}</span>
                                     @endif
-                                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-2 fade-in" style="animation-delay: 0.1s">
+                                    <h1 class="text-3xl sm:text-5xl lg:text-7xl font-bold text-white mb-2 fade-in" style="animation-delay: 0.1s">
                                         {{ $slide->title }}
                                     </h1>
                                     @if($slide->subtitle)
-                                        <div class="w-16 h-1 bg-brand-red mb-6 fade-in" style="animation-delay: 0.15s"></div>
-                                        <p class="text-lg text-gray-300 mb-8 max-w-lg fade-in" style="animation-delay: 0.2s">
+                                        <div class="w-12 h-1 bg-brand-red mb-4 sm:mb-6 fade-in hidden sm:block" style="animation-delay: 0.15s"></div>
+                                        <p class="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 max-w-lg fade-in" style="animation-delay: 0.2s">
                                             {{ $slide->subtitle }}
                                         </p>
                                     @endif
-                                    <div class="fade-in flex flex-wrap gap-4" style="animation-delay: 0.3s">
+                                    <div class="fade-in flex flex-wrap gap-3" style="animation-delay: 0.3s">
                                         @if($slide->button_link)
                                             <a href="{{ $slide->button_link }}" class="btn btn-primary btn-lg">
                                                 {{ $slide->button_text ?? 'Découvrir' }}
@@ -273,30 +273,64 @@
             position: relative;
         }
         .hero-pagination {
-            bottom: 2rem !important;
+            bottom: 1.5rem !important;
         }
         .hero-pagination .swiper-pagination-bullet {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: rgba(255, 255, 255, 0.5);
             opacity: 1;
+            transition: all 0.3s;
         }
         .hero-pagination .swiper-pagination-bullet-active {
             background: #C18E41;
+            width: 24px;
+            border-radius: 4px;
         }
         .hero-prev, .hero-next {
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transition: all 0.3s;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .hero-prev:hover, .hero-next:hover {
             color: #E2B156;
         }
         .hero-prev {
-            left: 1.5rem !important;
+            left: 1rem !important;
         }
         .hero-next {
-            right: 1.5rem !important;
+            right: 1rem !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero-swiper {
+                height: 100vh;
+                min-height: 100svh;
+            }
+            .hero-prev, .hero-next {
+                display: none !important;
+            }
+            .hero-pagination {
+                bottom: 1.25rem !important;
+            }
+            .hero-pagination .swiper-pagination-bullet {
+                width: 8px;
+                height: 8px;
+            }
+            .hero-pagination .swiper-pagination-bullet-active {
+                width: 20px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .hero-prev, .hero-next {
+                display: flex !important;
+            }
         }
     </style>
 @endpush
@@ -325,6 +359,13 @@
                         crossFade: true
                     },
                     speed: 1000,
+                    grabCursor: false,
+                    preventClicks: true,
+                    preventClicksPropagation: true,
+                    simulateTouch: true,
+                    touchRatio: 1,
+                    touchAngle: 45,
+                    longSwipesRatio: 0.2,
                 });
             }
         });
