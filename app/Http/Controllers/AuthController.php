@@ -72,14 +72,13 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('otp.verify.form')
-            ->with('success', 'Compte créé. Veuillez vérifier votre numéro de téléphone.')
-            ->with('phone', $request->phone);
+        return redirect()->route('otp.verify.form', ['phone' => $request->phone])
+            ->with('success', 'Compte créé. Veuillez vérifier votre numéro de téléphone.');
     }
 
-    public function showOtpVerify()
+    public function showOtpVerify(Request $request)
     {
-        $phone = session('phone', '');
+        $phone = $request->query('phone', session('phone', ''));
         return view('auth.otp-verify', compact('phone'));
     }
 
