@@ -30,7 +30,7 @@ class AdminHeroSlideController extends Controller
             'button_link' => 'nullable|url|max:500',
             'type' => 'required|in:mode,decoration,general',
             'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
+            'is_active' => 'sometimes|boolean',
         ]);
 
         if ($request->hasFile('background_image')) {
@@ -61,7 +61,7 @@ class AdminHeroSlideController extends Controller
             'button_link' => 'nullable|url|max:500',
             'type' => 'required|in:mode,decoration,general',
             'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
+            'is_active' => 'sometimes|boolean',
         ]);
 
         if ($request->hasFile('background_image')) {

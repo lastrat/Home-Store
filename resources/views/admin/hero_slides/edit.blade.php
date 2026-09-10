@@ -111,7 +111,7 @@
                             <label class="block text-sm font-semibold mb-2">Statut</label>
                             <div class="flex items-center gap-3 mt-3">
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" name="is_active" class="sr-only peer" {{ $hero_slide->is_active ? 'checked' : '' }}>
+                                    <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $hero_slide->is_active ? 'checked' : '' }}>
                                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-500"></div>
                                     <span class="ml-3 text-sm font-medium text-gray-700">Actif</span>
                                 </label>
