@@ -38,7 +38,7 @@
                 </form>
 
                 <div class="mt-6 text-center">
-                    <form method="POST" action="{{ route('otp.send') }}" class="inline">
+                    <form method="POST" action="{{ route('otp.resend') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-sm text-gold-600 font-semibold hover:underline">Renvoyer le code</button>
                     </form>

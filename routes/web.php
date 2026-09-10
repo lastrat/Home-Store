@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/otp/verification', [AuthController::class, 'showOtpVerify'])->name('otp.verify.form');
     Route::post('/otp/envoyer', [AuthController::class, 'sendOtp'])->name('otp.send');
+    Route::post('/otp/renvoyer', [AuthController::class, 'resendOtp'])->name('otp.resend');
     Route::post('/otp/verifier', [AuthController::class, 'verifyOtp'])->name('otp.verify');
 
     Route::middleware('otp.verified')->group(function () {

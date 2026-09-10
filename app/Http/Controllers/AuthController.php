@@ -72,7 +72,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $otpResponse = Http::withToken(config('services.envoisms.api_key'))
+        $otpResponse = Http::withToken(config('services.envoisms.key'))
             ->post(config('services.envoisms.base_url').'/v1/verify/send', [
                 'to' => $request->phone,
                 'app_id' => config('services.envoisms.app_id'),
@@ -105,7 +105,7 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
         ]);
 
-        $response = Http::withToken(config('services.envoisms.api_key'))
+        $response = Http::withToken(config('services.envoisms.key'))
             ->post(config('services.envoisms.base_url').'/v1/verify/send', [
                 'to' => $request->phone,
                 'app_id' => config('services.envoisms.app_id'),
@@ -125,6 +125,35 @@ class AuthController extends Controller
         return back()->with('success', 'Code OTP envoyé par SMS.');
     }
 
+    public function resendOtp(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string|max:20',
+        ]);
+
+        $sessionId = session('otp_session_id');
+
+        if (!$sessionId) {
+            return back()->with('error', 'Session OTP invalide. Veuillez renvoyer un nouveau code.');
+        }
+
+        $response = Http::withToken(config('services.envoisms.key'))
+            ->post(config('services.envoisms.base_url').'/v1/verify/resend', [
+                'session_id' => $sessionId,
+                'channel' => 'sms',
+            ]);
+
+        $data = $response->json();
+
+        if (!isset($data['session_id'])) {
+            return back()->with('error', 'Erreur lors du renvoi du code OTP.');
+        }
+
+        session(['otp_session_id' => $data['session_id']]);
+
+        return back()->with('success', 'Code OTP renvoyé par SMS.');
+    }
+
     public function verifyOtp(Request $request)
     {
         $request->validate([
@@ -139,7 +168,7 @@ class AuthController extends Controller
             return back()->withErrors(['code' => 'Session OTP invalide. Veuillez renvoyer un code.']);
         }
 
-        $result = Http::withToken(config('services.envoisms.api_key'))
+        $result = Http::withToken(config('services.envoisms.key'))
             ->post(config('services.envoisms.base_url').'/v1/verify/check', [
                 'session_id' => $sessionId,
                 'code' => $request->code,
