@@ -18,7 +18,13 @@
                     <div class="sticky top-28">
                         <div class="relative rounded-2xl overflow-hidden bg-gray-100 aspect-square mb-4 group">
                             <img id="main-product-image" src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/800x800?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                            @if($product->badge === 'nouveau')
+                            @if($product->dynamic_badge === 'nouveau')
+                                <span class="badge badge-new absolute top-4 left-4">Nouveau</span>
+                            @elseif($product->dynamic_badge === 'coup_de_coeur')
+                                <span class="badge badge-love absolute top-4 left-4">Coup de cœur</span>
+                            @elseif($product->dynamic_badge === 'bientot_epuise')
+                                <span class="badge badge-warning absolute top-4 left-4">Bientôt épuisé</span>
+                            @elseif($product->badge === 'nouveau')
                                 <span class="badge badge-new absolute top-4 left-4">Nouveau</span>
                             @elseif($product->badge === 'coup_de_coeur')
                                 <span class="badge badge-love absolute top-4 left-4">Coup de cœur</span>
@@ -66,6 +72,17 @@
                 <div>
                     <div class="flex items-center gap-2 mb-3">
                         <span class="badge badge-gold">{{ $product->category->name }}</span>
+                        @if($product->dynamic_badge === 'nouveau')
+                            <span class="badge badge-new">Nouveau</span>
+                        @elseif($product->dynamic_badge === 'coup_de_coeur')
+                            <span class="badge badge-love">Coup de cœur</span>
+                        @elseif($product->dynamic_badge === 'bientot_epuise')
+                            <span class="badge badge-warning">Bientôt épuisé</span>
+                        @elseif($product->badge === 'nouveau')
+                            <span class="badge badge-new">Nouveau</span>
+                        @elseif($product->badge === 'coup_de_coeur')
+                            <span class="badge badge-love">Coup de cœur</span>
+                        @endif
                         @if($product->stock > 0 && $product->stock <= 3)
                             <span class="badge badge-warning">Plus que {{ $product->stock }} en stock</span>
                         @endif

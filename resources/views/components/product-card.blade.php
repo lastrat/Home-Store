@@ -4,7 +4,13 @@
     <div class="image-wrap">
         <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" loading="lazy">
         <div class="badge-wrap">
-            @if($product->badge === 'nouveau')
+            @if($product->dynamic_badge === 'nouveau')
+                <span class="badge badge-new">Nouveau</span>
+            @elseif($product->dynamic_badge === 'coup_de_coeur')
+                <span class="badge badge-love">Coup de cœur</span>
+            @elseif($product->dynamic_badge === 'bientot_epuise')
+                <span class="badge badge-warning">Bientôt épuisé</span>
+            @elseif($product->badge === 'nouveau')
                 <span class="badge badge-new">Nouveau</span>
             @elseif($product->badge === 'coup_de_coeur')
                 <span class="badge badge-love">Coup de cœur</span>

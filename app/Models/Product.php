@@ -59,4 +59,44 @@ class Product extends Model
     {
         return $this->stock <= 0 && $this->variants()->where('stock', '>', 0)->doesntExist();
     }
+
+    public function getIsNewAttribute(): bool
+    {
+        return $this->created_at->greaterThan(now()->subMonth());
+    }
+
+    public function getIsLowStockAttribute(): bool
+    {
+        if ($this->stock > 0 && $this->stock <= 3) {
+            return true;
+        }
+
+        return $this->variants()->where('stock', '>', 0)->where('stock', '<=', 3)->exists();
+    }
+
+    public function getIsFavoriteAttribute(): bool
+    {
+        if (auth()->check()) {
+            return $this->wishlists()->where('user_id', auth()->id())->exists();
+        }
+
+        return false;
+    }
+
+    public function getDynamicBadgeAttribute(): ?string
+    {
+        if ($this->isNew) {
+            return 'nouveau';
+        }
+
+        if ($this->isLowStock) {
+            return 'bientot_epuise';
+        }
+
+        if ($this->isFavorite) {
+            return 'coup_de_coeur';
+        }
+
+        return $this->badge;
+    }
 }
