@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Neighborhood;
-use App\Models\OtpCode;
 use App\Models\User;
+use EnvoiSMS\Laravel\Facades\EnvoiSMS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -88,34 +88,39 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
         ]);
 
-        $code = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
-
-        OtpCode::create([
-            'phone' => $request->phone,
-            'code' => $code,
-            'expires_at' => now()->addMinutes(10),
+        $response = EnvoiSMS::sendOtp([
+            'to' => $request->phone,
+            'brand' => 'Home Store',
         ]);
 
-        // Mock: log the code. Replace with Twilio in production.
-        logger()->info("OTP Code for {$request->phone}: {$code}");
+        session([
+            'otp_session_id' => $response['session_id'],
+            'otp_phone' => $request->phone,
+        ]);
 
-        return back()->with('success', "Code OTP envoyé (mock: {$code}).");
+        return back()->with('success', 'Code OTP envoyé par SMS.');
     }
 
     public function verifyOtp(Request $request)
     {
         $request->validate([
             'phone' => 'required|string|max:20',
-            'code' => 'required|string|size:4',
+            'code' => 'required|string|size:6',
         ]);
 
-        $otp = OtpCode::where('phone', $request->phone)
-            ->where('code', $request->code)
-            ->where('expires_at', '>', now())
-            ->latest()
-            ->first();
+        $sessionId = session('otp_session_id');
+        $phone = session('otp_phone');
 
-        if (!$otp) {
+        if (!$sessionId || !$phone || $phone !== $request->phone) {
+            return back()->withErrors(['code' => 'Session OTP invalide. Veuillez renvoyer un code.']);
+        }
+
+        $result = EnvoiSMS::checkOtp(
+            sessionId: $sessionId,
+            code: $request->code
+        );
+
+        if (!($result['verified'] ?? false)) {
             return back()->withErrors(['code' => 'Code invalide ou expiré.']);
         }
 
@@ -125,7 +130,7 @@ class AuthController extends Controller
             Auth::login($user);
         }
 
-        $otp->delete();
+        session()->forget(['otp_session_id', 'otp_phone']);
 
         return redirect()->route('catalog.index')->with('success', 'Téléphone vérifié avec succès!');
     }

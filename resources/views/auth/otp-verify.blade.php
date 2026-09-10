@@ -28,11 +28,11 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-semibold mb-2">Numéro de téléphone</label>
-                        <input type="tel" name="phone" class="form-input" placeholder="+237 xxx xxx xxx" required value="{{ $phone ?? old('phone', session('phone')) }}">
+                        <input type="tel" name="phone" class="form-input" placeholder="+237 xxx xxx xxx" required value="{{ Auth::user()->phone ?? '' }}">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Code OTP</label>
-                        <input type="text" name="code" class="form-input text-center text-2xl tracking-widest" placeholder="0000" maxlength="4" required>
+                        <input type="text" name="code" class="form-input text-center text-2xl tracking-widest" placeholder="000000" maxlength="6" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-full">Vérifier</button>
                 </form>

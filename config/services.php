@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'envoisms' => [
+        'api_key' => env('ENVOISMS_API_KEY'),
+        'base_url' => env('ENVOISMS_BASE_URL', 'https://api.envoisms.ma'),
+    ],
+
 ];
