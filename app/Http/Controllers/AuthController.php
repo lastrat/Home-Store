@@ -72,8 +72,18 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        $otpResponse = EnvoiSMS::sendOtp([
+            'to' => $request->phone,
+            'brand' => 'Home Store',
+        ]);
+
+        session([
+            'otp_session_id' => $otpResponse['session_id'],
+            'otp_phone' => $request->phone,
+        ]);
+
         return redirect()->route('otp.verify.form', ['phone' => $request->phone])
-            ->with('success', 'Compte créé. Veuillez vérifier votre numéro de téléphone.');
+            ->with('success', 'Compte créé. Un code de vérification a été envoyé par SMS.');
     }
 
     public function showOtpVerify(Request $request)
