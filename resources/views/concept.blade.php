@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Notre Concept - Home Store')
+@section('title', 'Notre Concept - Home Store | Chic Living')
+@section('meta_description', 'Découvrez le concept unique de Home Store - Chic Living, une maison-boutique pas un magasin, dédiée à la mode et à la décoration intérieure à Abidjan. L\'accueil, le raffinement et la communauté sont nos valeurs.')
+@section('meta_keywords', 'concept home store, maison boutique, mode décoration Abidjan, accueil personnalisé, raffinement, communauté, expérience shopping, boutique différent')
+@section('canonical_url', route('concept'))
+@section('og_title', 'Notre Concept - Home Store | Chic Living')
+@section('og_description', 'Découvrez le concept unique de Home Store - Chic Living, une maison-boutique pas un magasin, dédiée à la mode et à la décoration intérieure.')
+@section('og_image', asset('logo/logo100 hs.jpg'))
+@section('twitter_title', 'Notre Concept - Home Store | Chic Living')
+@section('twitter_description', 'Découvrez le concept unique de Home Store - Chic Living, une maison-boutique pas un magasin.')
+@section('twitter_image', asset('logo/logo100 hs.jpg'))
 
 @section('content')
     <section class="pt-28 pb-6 bg-white border-b border-gray-100">

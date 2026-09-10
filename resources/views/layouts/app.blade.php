@@ -3,9 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Home Store - Chic Living, votre boutique de mode et décoration haut de gamme">
     <title>@yield('title', 'Home Store - Chic Living')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('logo/logo100 hs.jpg') }}">
+    <link rel="icon" type="image/jpeg" sizes="192x192" href="{{ asset('logo/logo100 hs.jpg') }}">
+    <meta name="theme-color" content="#15171C">
+
+    <meta name="description" content="@yield('meta_description', 'Home Store - Chic Living, votre boutique de mode et décoration haut de gamme. Découvrez nos collections exclusives de vêtements, chaussures, accessoires et décoration intérieure.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'mode, décoration, boutique, Abidjan, vêtements, chaussures, accessoires, design, intérieur, chic, luxe accessible')">
+    <meta name="author" content="Home Store - Chic Living">
+    <meta name="robots" content="@yield('robots', 'index, follow')">
+    <meta name="language" content="French">
+    <meta name="revisit-after" content="7 days">
+    <meta name="geo.region" content="CI">
+    <meta name="geo.placename" content="Abidjan">
+
+    <link rel="canonical" href="@yield('canonical_url', url()->current())">
+
+    <link rel="alternate" hreflang="fr" href="@yield('canonical_url', url()->current())">
+    <link rel="alternate" hreflang="fr-FR" href="@yield('canonical_url', url()->current())">
+    <link rel="alternate" hreflang="x-default" href="@yield('canonical_url', url()->current())">
+
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:site_name" content="Home Store - Chic Living">
+    <meta property="og:title" content="@yield('og_title', 'Home Store - Chic Living')">
+    <meta property="og:description" content="@yield('og_description', 'Home Store - Chic Living, votre boutique de mode et décoration haut de gamme.')">
+    <meta property="og:url" content="@yield('og_url', url()->current())">
+    <meta property="og:image" content="@yield('og_image', asset('logo/logo100 hs.jpg'))">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="@yield('og_image_alt', 'Home Store - Chic Living Logo')">
+    <meta property="og:locale" content="fr_FR">
+
+    <meta name="twitter:card" content="@yield('twitter_card', 'summary_large_image')">
+    <meta name="twitter:site" content="@yield('twitter_site', '@homestore')">
+    <meta name="twitter:title" content="@yield('twitter_title', 'Home Store - Chic Living')">
+    <meta name="twitter:description" content="@yield('twitter_description', 'Home Store - Chic Living, votre boutique de mode et décoration haut de gamme.')">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('logo/logo100 hs.jpg'))">
+    <meta name="twitter:image:alt" content="@yield('twitter_image_alt', 'Home Store - Chic Living Logo')">
+
+    <script type="application/ld+json">
+        @yield('json_ld', json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Store',
+            'name' => 'Home Store - Chic Living',
+            'description' => 'Maison-boutique dédiée à la mode et à la décoration intérieure',
+            'url' => config('app.url'),
+            'logo' => asset('logo/logo100 hs.jpg'),
+            'image' => asset('logo/logo100 hs.jpg'),
+            'address' => [
+                '@type' => 'PostalAddress',
+                'addressLocality' => 'Abidjan',
+                'addressCountry' => 'CI'
+            ],
+            'sameAs' => []
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+    </script>
+
     <link rel="stylesheet" href="{{ asset('css/modern.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>

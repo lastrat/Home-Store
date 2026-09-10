@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('title', 'Connexion - Home Store')
+@section('meta_description', 'Connectez-vous à votre espace client Home Store - Chic Living pour accéder à votre compte, suivre vos commandes et découvrir le catalogue privé.')
+@section('meta_keywords', 'connexion home store, login, compte client, espace client, authentification')
+@section('robots', 'noindex, nofollow')
+@section('canonical_url', route('login'))
+@section('og_title', 'Connexion - Home Store')
+@section('og_description', 'Connectez-vous à votre espace client Home Store - Chic Living.')
+@section('og_image', asset('logo/logo100 hs.jpg'))
+@section('twitter_title', 'Connexion - Home Store')
+@section('twitter_description', 'Connectez-vous à votre espace client Home Store - Chic Living.')
+@section('twitter_image', asset('logo/logo100 hs.jpg'))
 
 @section('content')
     <section class="min-h-screen flex items-center justify-center bg-gray-50 py-12">
@@ -31,7 +41,7 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-semibold mb-2">Numéro de téléphone</label>
-                        <input type="text" name="phone" class="form-input" placeholder="+225 01 00 00 00 00" required autofocus value="{{ old('phone') }}">
+                        <input type="text" name="phone" class="form-input" placeholder="+237 xxx xxx xxx" required autofocus value="{{ old('phone') }}">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Mot de passe</label>

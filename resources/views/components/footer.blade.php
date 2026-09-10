@@ -4,7 +4,7 @@
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="h-40">
-                        <img src="{{ asset('logo/blznc@3x-8.png') }}" alt="Home Store" class="h-full w-full object-cover">
+                        <img src="{{ asset('logo/blznc 2@3x-8.png') }}" alt="Home Store" class="h-full w-full object-cover">
                     </div>
                 </div>
                 <p class="text-gray-400 text-sm leading-relaxed max-w-md">

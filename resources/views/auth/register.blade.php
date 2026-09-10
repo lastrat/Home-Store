@@ -41,7 +41,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Numéro de téléphone</label>
-                        <input type="tel" name="phone" class="form-input" placeholder="+225 01 00 00 00 00" required value="{{ old('phone') }}">
+                        <input type="tel" name="phone" class="form-input" placeholder="+237 xxx xxx xxx" required value="{{ old('phone') }}">
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -50,17 +50,26 @@
                                 <option value="">Sélectionner...</option>
                                 <option value="Fonctionnaire" {{ old('profession') == 'Fonctionnaire' ? 'selected' : '' }}>Fonctionnaire</option>
                                 <option value="Entrepreneur" {{ old('profession') == 'Entrepreneur' ? 'selected' : '' }}>Entrepreneur</option>
+                                <option value="Secteur privé" {{ old('profession') == 'Secteur privé' ? 'selected' : '' }}>Secteur privé</option>
                                 <option value="Étudiant" {{ old('profession') == 'Étudiant' ? 'selected' : '' }}>Étudiant</option>
                                 <option value="Autre" {{ old('profession') == 'Autre' ? 'selected' : '' }}>Autre</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Quartier</label>
-                            <select name="neighborhood_id" class="form-input">
+                            <label class="block text-sm font-semibold mb-2">Ville de résidence</label>
+                            <select name="city_id" id="city_id" class="form-input" required>
                                 <option value="">Sélectionner...</option>
-                                @foreach($neighborhoods as $neighborhood)
-                                    <option value="{{ $neighborhood->id }}" {{ old('neighborhood_id') == $neighborhood->id ? 'selected' : '' }}>{{ $neighborhood->name }}</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Quartier</label>
+                            <select name="neighborhood_id" id="neighborhood_id" class="form-input" required>
+                                <option value="">Sélectionner une ville d'abord</option>
                             </select>
                         </div>
                     </div>
@@ -88,4 +97,39 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const citySelect = document.getElementById('city_id');
+            const neighborhoodSelect = document.getElementById('neighborhood_id');
+
+            if (citySelect && neighborhoodSelect) {
+                citySelect.addEventListener('change', function() {
+                    const cityId = this.value;
+                    
+                    if (cityId) {
+                        fetch(`/api/cities/${cityId}/neighborhoods`)
+                            .then(response => response.json())
+                            .then(data => {
+                                neighborhoodSelect.innerHTML = '<option value="">Sélectionner...</option>';
+                                data.forEach(neighborhood => {
+                                    const option = document.createElement('option');
+                                    option.value = neighborhood.id;
+                                    option.textContent = neighborhood.name;
+                                    neighborhoodSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error loading neighborhoods:', error);
+                                neighborhoodSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+                            });
+                    } else {
+                        neighborhoodSelect.innerHTML = '<option value="">Sélectionner une ville d\'abord</option>';
+                    }
+                });
+            }
+        });
+    </script>
+@endpush
 

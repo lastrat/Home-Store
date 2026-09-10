@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Neighborhood extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'city_id'];
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
 
     public function users(): HasMany
     {

@@ -2,14 +2,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <div class="h-12 w-12">
-                    <img src="{{ asset('logo/blznc@3x-8.png') }}" alt="Home Store" class="h-full w-full object-cover">
+                <div class="h-16">
+                    <img src="{{ asset('logo/logois2.png') }}" alt="Home Store" class="h-full w-full object-cover">
                 </div>
             </a>
 
             <div class="hidden md:flex items-center gap-1">
                 <a href="{{ route('home') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Accueil</a>
-                <a href="{{ route('concept') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Concept</a>
+                <a href="{{ route('concept') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">A Propos</a>
                 <a href="{{ route('activities') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Activités</a>
                 <a href="{{ route('boutique') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Boutique</a>
                 <a href="{{ route('contact') }}" class="nav-link px-4 py-2 text-sm font-medium text-white/80 hover:text-gold-400 transition-colors rounded-full hover:bg-white/5">Contact</a>
@@ -20,7 +20,12 @@
                     <a href="{{ route('login') }}" class="btn btn-ghost text-white text-sm">Connexion</a>
                     <a href="{{ route('register') }}" class="btn btn-red text-sm">Accéder au Catalogue</a>
                 @else
-                    <a href="{{ route('catalog.index') }}" class="btn btn-primary text-sm">Mon Catalogue</a>
+                <a href="{{ route('catalog.index') }}" class="btn btn-primary text-sm">Mon Catalogue</a>
+                    <a href="{{ route('account.wishlists') }}" class="relative btn btn-ghost text-white p-2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </a>
                     <a href="{{ route('cart.index') }}" class="relative btn btn-ghost text-white p-2">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="21" r="1"></circle>

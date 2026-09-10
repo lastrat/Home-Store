@@ -21,15 +21,16 @@
     <div class="header">
         <div class="logo">HS</div>
         <h1>Home Store - Chic Living</h1>
-        <p>Cocody, Abidjan, Côte d'Ivoire</p>
-        <p>Tél: +225 01 00 00 00 00</p>
+        <p>Akwa Nord, Douala, Cameroun</p>
+        <p>Tél: +237 6 99 82 29 01</p>
+        <p>contact@hs-chicliving.com</p>
     </div>
 
     <div class="info">
-        <div class="info-row"><span>Commande N°</span><span class="font-mono font-bold">{{ $order->order_number }}</span></div>
-        <div class="info-row"><span>Date</span><span>{{ $order->created_at->format('d/m/Y H:i') }}</span></div>
-        <div class="info-row"><span>Client</span><span>{{ $order->user->name }}</span></div>
-        <div class="info-row"><span>Paiement</span><span>{{ match($order->payment_method) { 'boutique' => 'Paiement en boutique', 'mobile_money' => 'Mobile Money', 'virement' => 'Virement', 'livraison' => 'À la livraison', default => $order->payment_method } }}</span></div>
+        <div class="info-row"><span>Commande N°: </span><span class="font-mono font-bold">{{ $order->order_number }}</span></div>
+        <div class="info-row"><span>Date: </span><span>{{ $order->created_at->format('d/m/Y H:i') }}</span></div>
+        <div class="info-row"><span>Client: </span><span>{{ $order->user->name }}</span></div>
+        <div class="info-row"><span>Paiement: </span><span>{{ match($order->payment_method) { 'boutique' => 'Paiement en boutique', 'mobile_money' => 'Mobile Money', 'virement' => 'Virement', 'livraison' => 'À la livraison', default => $order->payment_method } }}</span></div>
     </div>
 
     <table>

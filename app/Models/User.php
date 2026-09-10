@@ -19,6 +19,7 @@ class User extends Authenticatable
         'phone',
         'birthdate',
         'profession',
+        'city_id',
         'neighborhood_id',
         'phone_verified_at',
         'is_admin',

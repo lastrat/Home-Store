@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\Neighborhood;
 use App\Models\OtpCode;
 use App\Models\User;
-use App\Models\Neighborhood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -39,8 +40,9 @@ class AuthController extends Controller
 
     public function showRegister()
     {
+        $cities = City::orderBy('order')->get();
         $neighborhoods = Neighborhood::orderBy('name')->get();
-        return view('auth.register', compact('neighborhoods'));
+        return view('auth.register', compact('cities', 'neighborhoods'));
     }
 
     public function register(Request $request)
@@ -51,6 +53,7 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20|unique:users,phone',
             'email' => 'required|string|email|max:255|unique:users,email',
             'profession' => 'required|string|max:100',
+            'city_id' => 'nullable|exists:cities,id',
             'neighborhood_id' => 'nullable|exists:neighborhoods,id',
             'password' => 'required|string|min:8|confirmed',
             'terms' => 'required|accepted',
@@ -63,6 +66,7 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'birthdate' => $request->birthdate,
             'profession' => $request->profession,
+            'city_id' => $request->city_id,
             'neighborhood_id' => $request->neighborhood_id,
         ]);
 
