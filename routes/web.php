@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminHeroSlideController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
+use App\Http\Controllers\AdminSettingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
@@ -48,6 +49,7 @@ Route::get('/concept', [HomeController::class, 'concept'])->name('concept');
 Route::get('/activites', [HomeController::class, 'activities'])->name('activities');
 Route::get('/boutique', [HomeController::class, 'boutique'])->name('boutique');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::middleware('guest')->group(function () {
     Route::get('/connexion', [AuthController::class, 'showLogin'])->name('login');
@@ -126,4 +128,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/slides/{hero_slide}/modifier', [AdminHeroSlideController::class, 'edit'])->name('hero_slides.edit');
     Route::put('/slides/{hero_slide}', [AdminHeroSlideController::class, 'update'])->name('hero_slides.update');
     Route::delete('/slides/{hero_slide}', [AdminHeroSlideController::class, 'destroy'])->name('hero_slides.destroy');
+
+    Route::get('/parametres', [AdminSettingController::class, 'index'])->name('settings.index');
+    Route::put('/parametres', [AdminSettingController::class, 'update'])->name('settings.update');
 });

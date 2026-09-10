@@ -7,7 +7,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto text-center">
                 <span class="text-brand-red font-semibold text-sm uppercase tracking-wider">Contactez-nous</span>
-                <h1 class="text-4xl sm:text-5xl font-bold mt-2 mb-4 text-gray-900">Restons en <span class="text-gradient">Contact</span></h1>
+                <h1 class="text-4xl sm:text-5xl font-bold mt-2 mb-4 text-gray-900 text-gradient">Restons en <span class="">Contact</span></h1>
                 <div class="w-16 h-1 bg-brand-red mx-auto mb-6"></div>
                 <p class="text-xl text-gray-600 leading-relaxed">Une question, une demande spécifique ou simplement envie de dire bonjour ? Nous sommes à votre écoute.</p>
             </div>
@@ -16,30 +16,49 @@
 
     <section class="section bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if(session('success'))
+                <div class="alert alert-success max-w-3xl mx-auto mb-8">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-error max-w-3xl mx-auto mb-8">{{ session('error') }}</div>
+            @endif
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div>
-                    <form class="card p-8 space-y-6" method="POST" action="#">
+                    <form class="card p-8 space-y-6" method="POST" action="{{ route('contact.send') }}">
                         @csrf
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Nom complet</label>
-                            <input type="text" class="form-input" placeholder="Votre nom" required>
+                            <label class="block text-sm font-semibold mb-2">Nom complet <span class="text-brand-red">*</span></label>
+                            <input type="text" name="name" class="form-input" placeholder="Votre nom" required value="{{ old('name') }}">
+                            @error('name')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Email</label>
-                            <input type="email" class="form-input" placeholder="votre@email.com" required>
+                            <label class="block text-sm font-semibold mb-2">Email <span class="text-brand-red">*</span></label>
+                            <input type="email" name="email" class="form-input" placeholder="votre@email.com" required value="{{ old('email') }}">
+                            @error('email')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Sujet</label>
-                            <select class="form-input">
-                                <option>Demande d'information</option>
-                                <option>Commande</option>
-                                <option>Service client</option>
-                                <option>Autre</option>
+                            <label class="block text-sm font-semibold mb-2">Sujet <span class="text-brand-red">*</span></label>
+                            <select name="subject" class="form-input" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="Demande d'information" {{ old('subject') == 'Demande d\'information' ? 'selected' : '' }}>Demande d'information</option>
+                                <option value="Commande" {{ old('subject') == 'Commande' ? 'selected' : '' }}>Commande</option>
+                                <option value="Service client" {{ old('subject') == 'Service client' ? 'selected' : '' }}>Service client</option>
+                                <option value="Autre" {{ old('subject') == 'Autre' ? 'selected' : '' }}>Autre</option>
                             </select>
+                            @error('subject')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Message</label>
-                            <textarea rows="5" class="form-input" placeholder="Votre message..." required></textarea>
+                            <label class="block text-sm font-semibold mb-2">Message <span class="text-brand-red">*</span></label>
+                            <textarea name="message" rows="5" class="form-input" placeholder="Votre message..." required>{{ old('message') }}</textarea>
+                            @error('message')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary w-full">Envoyer le message</button>
                     </form>
@@ -57,7 +76,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-sm">Adresse</h4>
-                                    <p class="text-gray-500 text-sm">Akwa Nord, Douala, Cameroun</p>
+                                    <p class="text-gray-500 text-sm">{{ \App\Models\SiteSetting::get('contact_address', 'Akwa Nord, Douala, Cameroun') }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
@@ -68,7 +87,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-sm">Téléphone</h4>
-                                    <a href="tel:+237699822901" class="text-brand-red hover:underline text-sm">+237 6 99 82 29 01</a>
+                                    <a href="tel:+237699822901" class="text-brand-red hover:underline text-sm">{{ \App\Models\SiteSetting::get('contact_phone', '+237 6 99 82 29 01') }}</a>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
@@ -80,7 +99,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-sm">Email</h4>
-                                    <a href="mailto:contact@hs-chicliving.com" class="text-brand-red hover:underline text-sm">contact@hs-chicliving.com</a>
+                                    <a href="mailto:{{ \App\Models\SiteSetting::get('contact_email', 'contact@homestore.ci') }}" class="text-brand-red hover:underline text-sm">{{ \App\Models\SiteSetting::get('contact_email', 'contact@homestore.ci') }}</a>
                                 </div>
                             </div>
                         </div>
