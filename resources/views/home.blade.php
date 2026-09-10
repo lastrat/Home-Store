@@ -36,12 +36,13 @@
 @section('content')
     <!-- Slider Section Hero  -->
     @if($heroSlides->isNotEmpty())
-        <section class="hero" style="margin-top: 75px;">
-            <div class="swiper hero-swiper h-full">
+        <section class="hero has-swiper" style="margin-top: 75px;">
+            <div class="swiper hero-swiper">
                 <div class="swiper-wrapper">
                     @foreach($heroSlides as $slide)
                         <div class="swiper-slide relative">
                             <div class="hero-bg absolute inset-0" style="background-image: url('{{ asset('storage/' . $slide->background_image) }}');"></div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70 z-[1]"></div>
                             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
                                 <div class="max-w-2xl py-20">
                                     @if($slide->badge_text)
@@ -255,6 +256,9 @@
 
 @push('styles')
     <style>
+        .hero.has-swiper::before {
+            display: none;
+        }
         .hero-swiper {
             width: 100%;
             height: 100vh;
