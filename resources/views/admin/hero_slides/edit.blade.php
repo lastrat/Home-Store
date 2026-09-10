@@ -23,16 +23,31 @@
     <section class="section bg-gray-50">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="card p-8">
+                @if($errors->any())
+                    <div class="alert alert-error mb-6">
+                        <ul class="list-disc list-inside space-y-1">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form method="POST" action="{{ route('admin.hero_slides.update', $hero_slide) }}" class="space-y-6" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div>
                         <label class="block text-sm font-semibold mb-2">Titre <span class="text-brand-red">*</span></label>
                         <input type="text" name="title" class="form-input" required value="{{ old('title', $hero_slide->title) }}">
+                        @error('title')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Sous-titre</label>
                         <textarea name="subtitle" rows="2" class="form-input" placeholder="Description courte affichée sous le titre">{{ old('subtitle', $hero_slide->subtitle) }}</textarea>
+                        @error('subtitle')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Image de fond <span class="text-brand-red">*</span></label>
@@ -43,11 +58,17 @@
                                 <p class="text-xs text-gray-500 mt-1">Image actuelle. Téléchargez une nouvelle image pour la remplacer.</p>
                             </div>
                         @endif
+                        @error('background_image')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold mb-2">Badge</label>
                             <input type="text" name="badge_text" class="form-input" value="{{ old('badge_text', $hero_slide->badge_text) }}" placeholder="Ex: Nouveau">
+                            @error('badge_text')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-2">Type</label>
@@ -56,16 +77,25 @@
                                 <option value="mode" {{ old('type', $hero_slide->type) == 'mode' ? 'selected' : '' }}>Mode</option>
                                 <option value="decoration" {{ old('type', $hero_slide->type) == 'decoration' ? 'selected' : '' }}>Décoration</option>
                             </select>
+                            @error('type')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold mb-2">Texte du bouton</label>
                             <input type="text" name="button_text" class="form-input" value="{{ old('button_text', $hero_slide->button_text) }}" placeholder="Ex: Découvrir">
+                            @error('button_text')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-2">Lien du bouton</label>
                             <input type="url" name="button_link" class="form-input" value="{{ old('button_link', $hero_slide->button_link) }}" placeholder="Ex: /catalogue">
+                            @error('button_link')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -73,6 +103,9 @@
                             <label class="block text-sm font-semibold mb-2">Ordre d'affichage</label>
                             <input type="number" name="order" class="form-input" value="{{ old('order', $hero_slide->order) }}" min="0">
                             <p class="text-xs text-gray-500 mt-1">Les slides avec un ordre plus petit s'affichent en premier</p>
+                            @error('order')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-2">Statut</label>
@@ -83,6 +116,9 @@
                                     <span class="ml-3 text-sm font-medium text-gray-700">Actif</span>
                                 </label>
                             </div>
+                            @error('is_active')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="flex gap-4 pt-4">
