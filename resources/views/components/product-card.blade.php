@@ -4,19 +4,18 @@
     <div class="image-wrap">
         <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" loading="lazy">
         <div class="badge-wrap">
-            @if($product->dynamic_badge === 'nouveau')
-                <span class="badge badge-new">Nouveau</span>
-            @elseif($product->dynamic_badge === 'coup_de_coeur')
-                <span class="badge badge-love">Coup de cœur</span>
-            @elseif($product->dynamic_badge === 'bientot_epuise')
-                <span class="badge badge-warning">Bientôt épuisé</span>
-            @elseif($product->badge === 'nouveau')
-                <span class="badge badge-new">Nouveau</span>
-            @elseif($product->badge === 'coup_de_coeur')
-                <span class="badge badge-love">Coup de cœur</span>
-            @elseif($product->is_out_of_stock)
+            @foreach($product->dynamic_badges as $badge)
+                @if($badge === 'nouveau')
+                    <span class="badge badge-new">Nouveau</span>
+                @elseif($badge === 'coup_de_coeur')
+                    <span class="badge badge-love">Coup de cœur</span>
+                @elseif($badge === 'bientot_epuise')
+                    <span class="badge badge-warning">Bientôt épuisé</span>
+                @endif
+            @endforeach
+            @if($product->is_out_of_stock)
                 <span class="badge badge-warning">Épuisé</span>
-            @elseif($product->stock <= 3)
+            @elseif($product->stock <= 3 && !in_array('bientot_epuise', $product->dynamic_badges))
                 <span class="badge badge-warning">Plus que {{ $product->stock }}</span>
             @endif
         </div>

@@ -83,20 +83,26 @@ class Product extends Model
         return false;
     }
 
-    public function getDynamicBadgeAttribute(): ?string
+    public function getDynamicBadgesAttribute(): array
     {
+        $badges = [];
+
         if ($this->isNew) {
-            return 'nouveau';
+            $badges[] = 'nouveau';
         }
 
         if ($this->isLowStock) {
-            return 'bientot_epuise';
+            $badges[] = 'bientot_epuise';
         }
 
         if ($this->isFavorite) {
-            return 'coup_de_coeur';
+            $badges[] = 'coup_de_coeur';
         }
 
-        return $this->badge;
+        if (empty($badges) && $this->badge) {
+            $badges[] = $this->badge;
+        }
+
+        return $badges;
     }
 }
