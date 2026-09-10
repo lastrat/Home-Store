@@ -79,7 +79,8 @@ class AuthController extends Controller
 
     public function showOtpVerify()
     {
-        return view('auth.otp-verify');
+        $phone = session('phone', '');
+        return view('auth.otp-verify', compact('phone'));
     }
 
     public function sendOtp(Request $request)

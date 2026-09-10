@@ -28,7 +28,7 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-semibold mb-2">Numéro de téléphone</label>
-                        <input type="tel" name="phone" class="form-input" placeholder="+237 xxx xxx xxx" required value="{{ old('phone', session('phone')) }}">
+                        <input type="tel" name="phone" class="form-input" placeholder="+237 xxx xxx xxx" required value="{{ old('phone', $phone ?? session('phone')) }}">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Code OTP</label>
