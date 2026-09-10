@@ -67,11 +67,11 @@ class Product extends Model
 
     public function getIsLowStockAttribute(): bool
     {
-        if ($this->stock > 0 && $this->stock <= 3) {
+        if ($this->stock > 0 && $this->stock < 15) {
             return true;
         }
 
-        return $this->variants()->where('stock', '>', 0)->where('stock', '<=', 3)->exists();
+        return $this->variants()->where('stock', '>', 0)->where('stock', '<', 15)->exists();
     }
 
     public function getIsFavoriteAttribute(): bool
