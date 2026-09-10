@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             NeighborhoodSeeder::class,
             AdminUserSeeder::class,
             ProductSeeder::class,
+            HeroSlideSeeder::class,
         ]);
     }
 }
