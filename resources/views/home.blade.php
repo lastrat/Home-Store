@@ -236,20 +236,22 @@
     <section class="section bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-dark to-gray-800 p-12 lg:p-16">
-                <div class="relative z-10 max-w-xl">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Rejoignez notre communauté</h2>
-                    <p class="text-gray-300 mb-6">Accédez à notre catalogue exclusif, recevez nos offres privilégiées et vivez l'expérience Home Store.</p>
-                    <div class="text-white mb-8">
-                        <span class="text-5xl sm:text-6xl font-bold text-gold-400 counter" data-target="800">0</span>
+                <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+                    <div class="max-w-xl">
+                        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Rejoignez notre communauté</h2>
+                        <p class="text-gray-300 mb-6">Accédez à notre catalogue exclusif, recevez nos offres privilégiées et vivez l'expérience Home Store.</p>
+                        <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
+                            Créer mon compte
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-6xl sm:text-7xl lg:text-8xl font-bold text-gold-400 counter" data-target="800">0</span>
                         <p class="text-gray-300 mt-2 text-base sm:text-lg">Déjà <span class="font-semibold text-white counter-text">0</span> personnes ont fait de notre maison la leur. À vous de pousser la porte.</p>
                     </div>
-                    <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
-                        Créer mon compte
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
                 </div>
             </div>
         </div>
