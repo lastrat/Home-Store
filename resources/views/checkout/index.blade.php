@@ -81,20 +81,13 @@
                 <div>
                     <div class="card p-6 space-y-4 sticky top-28">
                         <h3 class="font-bold text-lg">Récapitulatif</h3>
-                        {{-- <div class="space-y-3">
+                        <div class="space-y-3">
                             @foreach($cart->items as $item)
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-600">{{ $item->product->name }} x{{ $item->quantity }}</span>
-                                    <span class="font-medium">{{ number_format($item->subtotal, 0, ',', ' ') }} FCFA</span>
                                 </div>
                             @endforeach
                         </div>
-                        <div class="border-t border-gray-100 pt-4">
-                            <div class="flex justify-between text-lg font-bold">
-                                <span>Total</span>
-                                <span class="text-gold-600">{{ number_format($cart->total, 0, ',', ' ') }} FCFA</span>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
             </div>
