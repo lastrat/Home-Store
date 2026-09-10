@@ -34,21 +34,17 @@
 
     <table>
         <thead>
-            <tr><th>Article</th><th>Qté</th><th>Prix</th><th>Total</th></tr>
+            <tr><th>Article</th><th>Qté</th></tr>
         </thead>
         <tbody>
             @foreach($order->items as $item)
                 <tr>
                     <td>{{ $item->product_name }}</td>
                     <td>x{{ $item->quantity }}</td>
-                    <td>{{ number_format($item->product_price, 0, ',', ' ') }} FCFA</td>
-                    <td>{{ number_format($item->subtotal, 0, ',', ' ') }} FCFA</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-
-    <div class="total">Total: {{ number_format($order->total, 0, ',', ' ') }} FCFA</div>
 
     <div class="footer">
         <p><strong>Merci pour votre commande !</strong></p>

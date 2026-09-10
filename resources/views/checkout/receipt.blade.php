@@ -59,23 +59,21 @@
 
                 <div class="bg-gray-50 rounded-2xl p-6 mb-6">
                     <h3 class="font-bold mb-4">Articles</h3>
-                    <div class="space-y-3">
-                        @foreach($order->items as $item)
-                            <div class="flex justify-between text-sm">
-                                <div>
-                                    <p class="font-medium">{{ $item->product_name }}</p>
-                                    <p class="text-gray-500">x{{ $item->quantity }} × {{ number_format($item->product_price, 0, ',', ' ') }} FCFA</p>
+                        <div class="space-y-3">
+                            @foreach($order->items as $item)
+                                <div class="flex justify-between text-sm">
+                                    <div>
+                                        <p class="font-medium">{{ $item->product_name }}</p>
+                                        <p class="text-gray-500">x{{ $item->quantity }}</p>
+                                    </div>
                                 </div>
-                                <span class="font-semibold">{{ number_format($item->subtotal, 0, ',', ' ') }} FCFA</span>
-                            </div>
-                        @endforeach
-                        <div class="border-t border-gray-200 pt-3 mt-3">
-                            <div class="flex justify-between font-bold text-lg">
-                                <span>Total</span>
-                                <span class="text-gold-600">{{ number_format($order->total, 0, ',', ' ') }} FCFA</span>
+                            @endforeach
+                            <div class="border-t border-gray-200 pt-3 mt-3">
+                                <div class="flex justify-between font-bold text-lg">
+                                    <span>Total</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>
 
                 <div class="bg-gold-50 border border-gold-200 rounded-2xl p-6">
