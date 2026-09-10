@@ -35,6 +35,7 @@ return [
         'key' => env('ENVOISMS_KEY'),
         'app_id' => env('ENVOISMS_APP_ID'),
         'base_url' => env('ENVOISMS_BASE_URL', 'https://api.envoisms.ma'),
+        'verify_ssl' => env('ENVOISMS_VERIFY_SSL', true),
     ],
 
 ];

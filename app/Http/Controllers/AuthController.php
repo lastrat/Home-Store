@@ -14,6 +14,17 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    private function envoisms(): \Illuminate\Http\Client\PendingRequest
+    {
+        $client = Http::withToken(config('services.envoisms.key'));
+
+        if (!config('services.envoisms.verify_ssl', true)) {
+            $client->withoutVerifying();
+        }
+
+        return $client;
+    }
+
     public function showLogin()
     {
         return view('auth.login');
@@ -72,7 +83,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $otpResponse = Http::withToken(config('services.envoisms.key'))
+        $otpResponse = $this->envoisms()
             ->post(config('services.envoisms.base_url').'/v1/verify/send', [
                 'to' => $request->phone,
                 'app_id' => config('services.envoisms.app_id'),
@@ -105,7 +116,7 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
         ]);
 
-        $response = Http::withToken(config('services.envoisms.key'))
+        $response = $this->envoisms()
             ->post(config('services.envoisms.base_url').'/v1/verify/send', [
                 'to' => $request->phone,
                 'app_id' => config('services.envoisms.app_id'),
@@ -137,7 +148,7 @@ class AuthController extends Controller
             return back()->with('error', 'Session OTP invalide. Veuillez renvoyer un nouveau code.');
         }
 
-        $response = Http::withToken(config('services.envoisms.key'))
+        $response = $this->envoisms()
             ->post(config('services.envoisms.base_url').'/v1/verify/resend', [
                 'session_id' => $sessionId,
                 'channel' => 'sms',
@@ -168,7 +179,7 @@ class AuthController extends Controller
             return back()->withErrors(['code' => 'Session OTP invalide. Veuillez renvoyer un code.']);
         }
 
-        $result = Http::withToken(config('services.envoisms.key'))
+        $result = $this->envoisms()
             ->post(config('services.envoisms.base_url').'/v1/verify/check', [
                 'session_id' => $sessionId,
                 'code' => $request->code,
