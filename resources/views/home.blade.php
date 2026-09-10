@@ -57,7 +57,7 @@
                                             {{ $slide->subtitle }}
                                         </p>
                                     @endif
-                                    <div class="fade-in" style="animation-delay: 0.3s">
+                                    <div class="fade-in flex flex-wrap gap-4" style="animation-delay: 0.3s">
                                         @if($slide->button_link)
                                             <a href="{{ $slide->button_link }}" class="btn btn-primary btn-lg">
                                                 {{ $slide->button_text ?? 'Découvrir' }}
@@ -73,6 +73,11 @@
                                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                                     <polyline points="12 5 19 12 12 19"></polyline>
                                                 </svg>
+                                            </a>
+                                        @endif
+                                        @if($slide->button2_link)
+                                            <a href="{{ $slide->button2_link }}" class="btn btn-outline btn-lg text-white border-white/30 hover:bg-white hover:text-black">
+                                                {{ $slide->button2_text ?? 'En savoir plus' }}
                                             </a>
                                         @endif
                                     </div>

@@ -78,16 +78,32 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Texte du bouton</label>
+                            <label class="block text-sm font-semibold mb-2">Texte du bouton 1</label>
                             <input type="text" name="button_text" class="form-input" value="{{ old('button_text', 'Découvrir') }}" placeholder="Ex: Découvrir">
                             @error('button_text')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Lien du bouton</label>
+                            <label class="block text-sm font-semibold mb-2">Lien du bouton 1</label>
                             <input type="url" name="button_link" class="form-input" value="{{ old('button_link') }}" placeholder="Ex: /catalogue">
                             @error('button_link')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Texte du bouton 2</label>
+                            <input type="text" name="button2_text" class="form-input" value="{{ old('button2_text') }}" placeholder="Ex: Nous contacter">
+                            @error('button2_text')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Lien du bouton 2</label>
+                            <input type="url" name="button2_link" class="form-input" value="{{ old('button2_link') }}" placeholder="Ex: /contact">
+                            @error('button2_link')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>

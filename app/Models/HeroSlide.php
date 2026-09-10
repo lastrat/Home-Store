@@ -13,6 +13,8 @@ class HeroSlide extends Model
         'badge_text',
         'button_text',
         'button_link',
+        'button2_text',
+        'button2_link',
         'type',
         'order',
         'is_active',
