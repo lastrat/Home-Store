@@ -47,14 +47,17 @@
 
                         <div class="border-t border-gray-100 pt-4">
                             <h3 class="font-semibold text-sm uppercase tracking-wider mb-3">Sous-catégories</h3>
-                            <div class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                                @foreach($subcategories as $subcategory)
-                                    <a href="{{ route('catalog.index', array_merge(request()->query(), ['category_id' => $subcategory->id])) }}" class="flex items-center gap-2 text-sm {{ request('category_id') == $subcategory->id ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">
-                                        <span class="text-xs">{{ $subcategory->parent->name ?? '' }}</span>
-                                        <span class="flex-1">{{ $subcategory->name }}</span>
-                                    </a>
-                                @endforeach
-                            </div>
+                            @if(request('family'))
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                                    @foreach($subcategories as $subcategory)
+                                        <a href="{{ route('catalog.index', array_merge(request()->query(), ['category_id' => $subcategory->id])) }}" class="flex items-center gap-2 text-sm {{ request('category_id') == $subcategory->id ? 'text-gold-600 font-semibold' : 'text-gray-600 hover:text-gold-600' }}">
+                                            <span class="flex-1">{{ $subcategory->name }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="text-sm text-gray-400">Sélectionnez une famille pour voir les sous-catégories.</p>
+                            @endif
                         </div>
 
                         <div class="border-t border-gray-100 pt-4">

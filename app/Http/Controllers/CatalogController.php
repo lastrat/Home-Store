@@ -83,6 +83,10 @@ class CatalogController extends Controller
             ->orderBy('name')
             ->get();
 
+        if ($request->filled('family')) {
+            $subcategories = $subcategories->where('family', $request->family);
+        }
+
         $sizes = Product::where('is_active', true)
             ->where(function ($q) {
                 $q->whereNotNull('size')->orWhereHas('variants', fn($q) => $q->whereNotNull('size'));
