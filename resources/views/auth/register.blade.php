@@ -103,13 +103,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const citySelect = document.getElementById('city_id');
             const neighborhoodSelect = document.getElementById('neighborhood_id');
+            const apiBase = '{{ url("/api/cities") }}';
 
             if (citySelect && neighborhoodSelect) {
                 citySelect.addEventListener('change', function() {
                     const cityId = this.value;
                     
                     if (cityId) {
-                        fetch(`/api/cities/${cityId}/neighborhoods`)
+                        fetch(`${apiBase}/${cityId}/neighborhoods`)
                             .then(response => response.json())
                             .then(data => {
                                 neighborhoodSelect.innerHTML = '<option value="">Sélectionner...</option>';
