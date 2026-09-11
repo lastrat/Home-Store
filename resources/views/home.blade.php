@@ -160,9 +160,9 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                                     <div class="relative">
                                         <div class="overflow-hidden rounded-2xl">
-                                            <div id="category-carousel-{{ $showcaseIndex }}" class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
+                                            <div id="category-carousel-{{ $showcaseIndex }}" class="flex transition-transform duration-500 ease-in-out">
                                                 @foreach($showcase['products']->take(4) as $product)
-                                                    <div class="flex-shrink-0 w-64 snap-start">
+                                                    <div class="w-full flex-shrink-0">
                                                         <div class="rounded-xl overflow-hidden bg-gray-100 aspect-[3/4]">
                                                             <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                                                         </div>
@@ -172,7 +172,7 @@
                                         </div>
                                         <div class="flex justify-center gap-2 mt-4">
                                             @foreach($showcase['products']->take(4) as $index => $product)
-                                                <div class="w-2 h-2 rounded-full {{ $index === 0 ? 'bg-gold-500' : 'bg-gray-300' }}"></div>
+                                                <button class="carousel-dot w-2 h-2 rounded-full {{ $index === 0 ? 'bg-gold-500' : 'bg-gray-300' }}" data-index="{{ $index }}"></button>
                                             @endforeach
                                         </div>
                                     </div>
@@ -467,57 +467,65 @@
         document.addEventListener('DOMContentLoaded', function() {
             const carousels = document.querySelectorAll('[id^="category-carousel-"]');
 
+            const goToSlide = (carousel, index) => {
+                const slides = carousel.children;
+                if (!slides.length) return;
+                const safeIndex = ((index % slides.length) + slides.length) % slides.length;
+                carousel.style.transform = `translateX(-${safeIndex * 100}%)`;
+                updateDots(carousel, safeIndex);
+            };
+
+            const updateDots = (carousel, activeIndex) => {
+                const container = carousel.closest('.relative');
+                if (!container) return;
+                const dots = container.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('bg-gold-500', i === activeIndex);
+                    dot.classList.toggle('bg-gray-300', i !== activeIndex);
+                });
+            };
+
+            const startAutoScroll = (carousel) => {
+                let currentIndex = 0;
+                const slides = carousel.children;
+                if (!slides.length) return;
+
+                carousel._autoScrollInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    goToSlide(carousel, currentIndex);
+                }, 3000);
+            };
+
+            const stopAutoScroll = (carousel) => {
+                clearInterval(carousel._autoScrollInterval);
+            };
+
             carousels.forEach((carousel) => {
-                let autoScrollInterval;
-                let isDown = false;
-                let startX;
-                let scrollLeft;
+                let currentIndex = 0;
+                const slides = carousel.children;
+                if (!slides.length) return;
 
-                const startAutoScroll = () => {
-                    autoScrollInterval = setInterval(() => {
-                        if (carousel.scrollWidth - carousel.scrollLeft <= carousel.clientWidth) {
-                            carousel.scrollTo({ left: 0, behavior: 'smooth' });
-                        } else {
-                            carousel.scrollBy({ left: 280, behavior: 'smooth' });
-                        }
-                    }, 3000);
-                };
+                carousel._autoScrollInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    goToSlide(carousel, currentIndex);
+                }, 3000);
 
-                const stopAutoScroll = () => {
-                    clearInterval(autoScrollInterval);
-                };
+                carousel.addEventListener('mouseenter', () => stopAutoScroll(carousel));
+                carousel.addEventListener('mouseleave', () => startAutoScroll(carousel));
+                carousel.addEventListener('touchstart', () => stopAutoScroll(carousel), { passive: true });
+                carousel.addEventListener('touchend', () => startAutoScroll(carousel));
 
-                carousel.addEventListener('mouseenter', stopAutoScroll);
-                carousel.addEventListener('mouseleave', startAutoScroll);
-                carousel.addEventListener('touchstart', stopAutoScroll);
-                carousel.addEventListener('touchend', startAutoScroll);
-
-                carousel.addEventListener('mousedown', (e) => {
-                    isDown = true;
-                    carousel.style.cursor = 'grabbing';
-                    startX = e.pageX - carousel.offsetLeft;
-                    scrollLeft = carousel.scrollLeft;
-                });
-
-                carousel.addEventListener('mouseleave', () => {
-                    isDown = false;
-                    carousel.style.cursor = 'grab';
-                });
-
-                carousel.addEventListener('mouseup', () => {
-                    isDown = false;
-                    carousel.style.cursor = 'grab';
-                });
-
-                carousel.addEventListener('mousemove', (e) => {
-                    if (!isDown) return;
-                    e.preventDefault();
-                    const x = e.pageX - carousel.offsetLeft;
-                    const walk = (x - startX) * 2;
-                    carousel.scrollLeft = scrollLeft - walk;
-                });
-
-                startAutoScroll();
+                const container = carousel.closest('.relative');
+                if (container) {
+                    container.querySelectorAll('.carousel-dot').forEach((dot) => {
+                        dot.addEventListener('click', () => {
+                            stopAutoScroll(carousel);
+                            currentIndex = parseInt(dot.dataset.index, 10);
+                            goToSlide(carousel, currentIndex);
+                            startAutoScroll(carousel);
+                        });
+                    });
+                }
             });
         });
     </script>
