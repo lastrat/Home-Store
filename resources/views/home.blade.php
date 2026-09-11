@@ -146,18 +146,55 @@
                         </svg>
                     </a>
                 </div>
-            @else
-                <div class="text-center py-16">
-                    <p class="text-gray-500 mb-6">Connectez-vous pour découvrir notre catalogue privé.</p>
-                    <a href="{{ route('register') }}" class="btn btn-primary btn-lg">
-                        Accéder au Catalogue
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
+        @else
+            <section class="section bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">Nos Univers</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-4">Découvrez nos collections</h2>
+                        <p class="text-gray-500 max-w-xl mx-auto">Explorez nos univers mode et décoration et trouvez votre bonheur.</p>
+                    </div>
+                    @foreach($categoryShowcases as $showcaseIndex => $showcase)
+                        @if($showcase['products']->isNotEmpty())
+                            <div class="mb-16 last:mb-0">
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                                    <div class="relative">
+                                        <div class="overflow-hidden rounded-2xl">
+                                            <div id="category-carousel-{{ $showcaseIndex }}" class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory" style="scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth;">
+                                                @foreach($showcase['products']->take(4) as $product)
+                                                    <div class="flex-shrink-0 w-64 snap-start">
+                                                        <div class="rounded-xl overflow-hidden bg-gray-100 aspect-[3/4]">
+                                                            <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-center gap-2 mt-4">
+                                            @foreach($showcase['products']->take(4) as $index => $product)
+                                                <div class="w-2 h-2 rounded-full {{ $index === 0 ? 'bg-gold-500' : 'bg-gray-300' }}"></div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="text-gold-600 font-semibold text-sm uppercase tracking-wider">{{ $showcase['name'] }}</span>
+                                        <h3 class="text-2xl sm:text-3xl font-bold mt-2 mb-4 text-gray-900">{{ $showcase['name'] }}</h3>
+                                        <p class="text-gray-500 mb-6 leading-relaxed">{{ $showcase['description'] }}</p>
+                                        <a href="{{ $showcase['link'] }}" class="btn btn-primary btn-lg">
+                                            Découvrir la collection
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                <polyline points="12 5 19 12 12 19"></polyline>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
-            @endauth
+            </section>
+        @endauth
         </div>
     </section>
 
@@ -249,7 +286,7 @@
                         </a>
                     </div>
                     <div class="text-right">
-                        <span class="text-6xl sm:text-7xl lg:text-8xl font-bold text-gold-400 counter" data-target="800">0</span>
+                        <span class="text-6xl sm:text-7xl lg:text-8xl font-bold text-gold-400 counter" data-target="250">0</span>
                         <p class="text-gray-300 mt-2 text-base sm:text-lg">Déjà <span class="font-semibold text-white counter-text">0</span> personnes ont fait de notre maison la leur. À vous de pousser la porte.</p>
                     </div>
                 </div>
@@ -330,6 +367,14 @@
             .hero-prev, .hero-next {
                 display: flex !important;
             }
+        }
+
+        #category-carousel-0, #category-carousel-1, #category-carousel-2, #category-carousel-3 {
+            cursor: grab;
+        }
+
+        #category-carousel-0:active, #category-carousel-1:active, #category-carousel-2:active, #category-carousel-3:active {
+            cursor: grabbing;
         }
     </style>
 @endpush
@@ -415,6 +460,65 @@
             }, { threshold: 0.5 });
 
             counters.forEach((counter) => observer.observe(counter));
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousels = document.querySelectorAll('[id^="category-carousel-"]');
+
+            carousels.forEach((carousel) => {
+                let autoScrollInterval;
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                const startAutoScroll = () => {
+                    autoScrollInterval = setInterval(() => {
+                        if (carousel.scrollWidth - carousel.scrollLeft <= carousel.clientWidth) {
+                            carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            carousel.scrollBy({ left: 280, behavior: 'smooth' });
+                        }
+                    }, 3000);
+                };
+
+                const stopAutoScroll = () => {
+                    clearInterval(autoScrollInterval);
+                };
+
+                carousel.addEventListener('mouseenter', stopAutoScroll);
+                carousel.addEventListener('mouseleave', startAutoScroll);
+                carousel.addEventListener('touchstart', stopAutoScroll);
+                carousel.addEventListener('touchend', startAutoScroll);
+
+                carousel.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    carousel.style.cursor = 'grabbing';
+                    startX = e.pageX - carousel.offsetLeft;
+                    scrollLeft = carousel.scrollLeft;
+                });
+
+                carousel.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    carousel.style.cursor = 'grab';
+                });
+
+                carousel.addEventListener('mouseup', () => {
+                    isDown = false;
+                    carousel.style.cursor = 'grab';
+                });
+
+                carousel.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - carousel.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    carousel.scrollLeft = scrollLeft - walk;
+                });
+
+                startAutoScroll();
+            });
         });
     </script>
 @endpush

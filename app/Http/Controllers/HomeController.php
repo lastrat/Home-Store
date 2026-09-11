@@ -48,7 +48,51 @@ class HomeController extends Controller
             $decoProducts = collect();
         }
 
-        return view('home', compact('heroSlides', 'featuredProducts', 'newProducts', 'decoProducts'));
+        $categoryShowcases = [
+            [
+                'name' => 'Vêtements',
+                'family' => 'mode',
+                'category_slugs' => ['robes', 'ensembles'],
+                'description' => 'Des pièces raffinées pour femme, des coupes modernes et des matières nobles.',
+                'link' => route('catalog.index', ['family' => 'mode']),
+            ],
+            [
+                'name' => 'Chaussure',
+                'family' => 'mode',
+                'category_slugs' => ['chaussures'],
+                'description' => 'Une sélection de chaussures élégantes et confortables pour toutes les occasions.',
+                'link' => route('catalog.index', ['family' => 'mode']),
+            ],
+            [
+                'name' => 'Accessoire',
+                'family' => 'mode',
+                'category_slugs' => ['accessoires', 'sacs'],
+                'description' => 'Complétez votre look avec nos accessoires soigneusement choisis.',
+                'link' => route('catalog.index', ['family' => 'mode']),
+            ],
+            [
+                'name' => 'Décoration intérieure',
+                'family' => 'decoration',
+                'category_slugs' => ['salon', 'luminaires', 'vases', 'coussins', 'mobilier'],
+                'description' => 'Transformez votre intérieur avec nos pièces de décoration chic et authentiques.',
+                'link' => route('catalog.index', ['family' => 'decoration']),
+            ],
+        ];
+
+        foreach ($categoryShowcases as &$showcase) {
+            $showcase['products'] = Product::where('is_active', true)
+                ->where('stock', '>', 0)
+                ->whereHas('category', function ($q) use ($showcase) {
+                    $q->where('family', $showcase['family'])
+                        ->whereIn('slug', $showcase['category_slugs']);
+                })
+                ->with('category')
+                ->latest()
+                ->take(8)
+                ->get();
+        }
+
+        return view('home', compact('heroSlides', 'featuredProducts', 'newProducts', 'decoProducts', 'categoryShowcases'));
     }
 
     public function concept()
