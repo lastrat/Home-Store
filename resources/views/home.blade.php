@@ -163,7 +163,7 @@
                                             <div id="category-carousel-{{ $showcaseIndex }}" class="flex transition-transform duration-500 ease-in-out">
                                                 @foreach($showcase['products']->take(4) as $product)
                                                     <div class="w-full flex-shrink-0">
-                                                        <div class="rounded-xl overflow-hidden bg-gray-100 aspect-[3/4]">
+                                                        <div class="rounded-xl overflow-hidden bg-gray-100 aspect-[4/3]">
                                                             <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/400x500?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                                                         </div>
                                                     </div>
