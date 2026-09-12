@@ -41,19 +41,32 @@ class ProductController extends Controller
 
     public function expressInterest(Product $product)
     {
-        $interest = ProductInterest::firstOrCreate([
-            'user_id' => Auth::id(),
-            'product_id' => $product->id,
-        ]);
+        $userId = auth()->id();
+        $existing = ProductInterest::where('user_id', $userId)
+            ->where('product_id', $product->id)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+            $interested = false;
+            $message = 'Vous ne serez plus notifié pour ce produit.';
+        } else {
+            ProductInterest::create([
+                'user_id' => $userId,
+                'product_id' => $product->id,
+            ]);
+            $interested = true;
+            $message = 'Vous serez notifié lorsque ce produit sera de nouveau disponible.';
+        }
 
         if (request()->expectsJson()) {
             return response()->json([
-                'interested' => true,
-                'message' => 'Vous serez notifié lorsque ce produit sera de nouveau disponible.',
+                'interested' => $interested,
+                'message' => $message,
             ]);
         }
 
-        return back()->with('success', 'Vous serez notifié lorsque ce produit sera de nouveau disponible.');
+        return back()->with('success', $message);
     }
 
     public function trackView(Product $product)

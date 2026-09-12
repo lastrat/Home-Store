@@ -42,7 +42,7 @@
             </button>
             @endif
             @if($product->is_out_of_stock && auth()->check())
-                <button class="interest-btn {{ $product->has_interest ? 'interested' : '' }}" data-product-id="{{ $product->id }}" title="Être notifié" {{ $product->has_interest ? 'disabled' : '' }}>
+                <button class="interest-btn {{ $product->has_interest ? 'interested' : '' }}" data-product-id="{{ $product->id }}" title="Être notifié">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         @if($product->has_interest)
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>

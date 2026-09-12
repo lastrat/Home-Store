@@ -186,7 +186,6 @@
 
             document.querySelectorAll('.interest-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (this.disabled) return;
                     const productId = this.dataset.productId;
                     fetch(`/produit/${productId}/interest`, {
                         method: 'POST',
@@ -203,11 +202,20 @@
                     })
                     .then(data => {
                         alert(data.message);
-                        this.classList.add('interested');
-                        this.disabled = true;
-                        const svg = this.querySelector('svg');
-                        if (svg) {
-                            svg.innerHTML = '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"></path>';
+                        if (data.interested) {
+                            this.classList.add('interested');
+                            this.disabled = false;
+                            const svg = this.querySelector('svg');
+                            if (svg) {
+                                svg.innerHTML = '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"></path>';
+                            }
+                        } else {
+                            this.classList.remove('interested');
+                            this.disabled = false;
+                            const svg = this.querySelector('svg');
+                            if (svg) {
+                                svg.innerHTML = '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path>';
+                            }
                         }
                     })
                     .catch(error => {
