@@ -83,6 +83,15 @@
                                     <td class="font-semibold">{{ number_format($order->total, 0, ',', ' ') }} FCFA</td>
                                     <td>
                                         <span class="badge {{ match($order->status) { 'en_attente' => 'badge-warning', 'valide' => 'bg-blue-100 text-blue-700', 'paye' => 'bg-green-100 text-green-700', 'recupere' => 'bg-green-100 text-green-700', 'annule' => 'bg-red-100 text-brand-red', default => 'badge-gold' } }}">{{ match($order->status) { 'en_attente' => 'En attente', 'valide' => 'Validé', 'paye' => 'Payé', 'recupere' => 'Récupéré', 'annule' => 'Annulé', default => $order->status } }}</span>
+                                        @if($order->payment_proof)
+                                            <span class="ml-2 inline-flex items-center gap-1 text-xs text-gold-600">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                                </svg>
+                                                Justificatif
+                                            </span>
+                                        @endif
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-outline">Voir</a>

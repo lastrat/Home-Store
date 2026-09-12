@@ -72,6 +72,29 @@
                         @enderror
                     </div>
 
+                    <div class="border-b border-gray-200 pb-6 mb-6">
+                        <h2 class="text-xl font-bold mb-1">Paiement</h2>
+                        <p class="text-sm text-gray-500">Configurez les informations de paiement pour les clients.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Numéro Mobile Money</label>
+                        <input type="text" name="payment_mobile_money_number" class="form-input" value="{{ old('payment_mobile_money_number', App\Models\SiteSetting::get('payment_mobile_money_number')) }}" placeholder="+237 6 99 82 29 01">
+                        <p class="text-xs text-gray-500 mt-1">Numéro sur lequel les clients doivent envoyer leur paiement Mobile Money.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Détails Virement</label>
+                        <textarea name="payment_virement_details" rows="3" class="form-input" placeholder="Nom du compte: ..., Banque: ..., RIB: ...">{{ old('payment_virement_details', App\Models\SiteSetting::get('payment_virement_details')) }}</textarea>
+                        <p class="text-xs text-gray-500 mt-1">Informations bancaires pour les virements.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Détails Paiement en Boutique</label>
+                        <textarea name="payment_boutique_details" rows="3" class="form-input" placeholder="Adresse de la boutique, horaires, etc.">{{ old('payment_boutique_details', App\Models\SiteSetting::get('payment_boutique_details')) }}</textarea>
+                        <p class="text-xs text-gray-500 mt-1">Informations complémentaires pour le paiement en boutique.</p>
+                    </div>
+
                     <div class="flex gap-4 pt-4">
                         <button type="submit" class="btn btn-primary">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">

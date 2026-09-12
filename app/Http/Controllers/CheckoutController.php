@@ -23,7 +23,13 @@ class CheckoutController extends Controller
             return redirect()->route('catalog.index')->with('error', 'Votre panier est vide.');
         }
 
-        return view('checkout.index', compact('cart'));
+        $paymentDetails = [
+            'mobile_money' => SiteSetting::get('payment_mobile_money_number', ''),
+            'virement' => SiteSetting::get('payment_virement_details', ''),
+            'boutique' => SiteSetting::get('payment_boutique_details', ''),
+        ];
+
+        return view('checkout.index', compact('cart', 'paymentDetails'));
     }
 
     public function store(Request $request)
@@ -31,6 +37,7 @@ class CheckoutController extends Controller
         $request->validate([
             'payment_method' => 'required|in:boutique,mobile_money,virement,livraison',
             'notes' => 'nullable|string|max:1000',
+            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf,heic,heif|max:5120',
         ]);
 
         $cart = Cart::where('user_id', auth()->id())->with('items.product', 'items.variant')->firstOrFail();
@@ -41,14 +48,24 @@ class CheckoutController extends Controller
 
         $orderNumber = 'HS-' . now()->year . '-' . str_pad(Order::count() + 1, 3, '0', STR_PAD_LEFT);
 
-        $order = Order::create([
+        $data = [
             'user_id' => auth()->id(),
             'order_number' => $orderNumber,
             'total' => $cart->total,
             'payment_method' => $request->payment_method,
             'status' => 'en_attente',
             'notes' => $request->notes,
-        ]);
+        ];
+
+        if ($request->hasFile('payment_proof')) {
+            $path = $request->file('payment_proof')->store('payment-proofs', 'public');
+            $data['payment_proof'] = $path;
+            $data['payment_status'] = 'pending_review';
+        } else {
+            $data['payment_status'] = $request->payment_method === 'boutique' || $request->payment_method === 'livraison' ? 'no_proof' : 'pending_proof';
+        }
+
+        $order = Order::create($data);
 
         foreach ($cart->items as $item) {
             $price = $item->variant ? $item->product->price + $item->variant->price_adjustment : $item->product->price;

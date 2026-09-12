@@ -31,6 +31,22 @@
                     <div><span class="text-gray-500">Quartier:</span> <strong>{{ $order->user->neighborhood?->name ?? '-' }}</strong></div>
                     <div><span class="text-gray-500">Paiement:</span> <strong>{{ $order->payment_method }}</strong></div>
                     <div><span class="text-gray-500">Total:</span> <strong class="text-gold-600">{{ number_format($order->total, 0, ',', ' ') }} FCFA</strong></div>
+                    @if($order->payment_proof)
+                        <div class="col-span-2">
+                            <span class="text-gray-500">Justificatif de paiement:</span>
+                            <div class="mt-2">
+                                @php
+                                    $extension = pathinfo($order->payment_proof, PATHINFO_EXTENSION);
+                                    $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                @endphp
+                                @if($isImage)
+                                    <img src="{{ asset('storage/' . $order->payment_proof) }}" alt="Justificatif de paiement" class="max-w-md rounded-xl border border-gray-200">
+                                @else
+                                    <a href="{{ asset('storage/' . $order->payment_proof) }}" target="_blank" class="btn btn-outline btn-sm">Voir le document</a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <form method="POST" action="{{ route('admin.orders.updateStatus', $order) }}" class="flex items-center gap-4">

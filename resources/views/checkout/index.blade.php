@@ -29,6 +29,9 @@
                                             </svg>
                                             <span class="font-semibold">Paiement en boutique</span>
                                         </div>
+                                        @if($paymentDetails['boutique'])
+                                            <p class="text-xs text-gray-500 mt-2">{{ $paymentDetails['boutique'] }}</p>
+                                        @endif
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
@@ -41,6 +44,9 @@
                                             </svg>
                                             <span class="font-semibold">Mobile Money</span>
                                         </div>
+                                        @if($paymentDetails['mobile_money'])
+                                            <p class="text-xs text-gray-500 mt-2">Numéro: {{ $paymentDetails['mobile_money'] }}</p>
+                                        @endif
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
@@ -53,6 +59,9 @@
                                             </svg>
                                             <span class="font-semibold">Virement</span>
                                         </div>
+                                        @if($paymentDetails['virement'])
+                                            <p class="text-xs text-gray-500 mt-2">{{ $paymentDetails['virement'] }}</p>
+                                        @endif
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
@@ -70,6 +79,13 @@
                                     </div>
                                 </label>
                             </div>
+
+                            <div id="payment-proof-section" class="hidden">
+                                <label class="block text-sm font-semibold mb-2">Justificatif de paiement</label>
+                                <input type="file" name="payment_proof" class="form-input" accept=".jpg,.jpeg,.png,.pdf,.heic,.heif">
+                                <p class="text-xs text-gray-500 mt-1"> Formats acceptés: JPG, PNG, PDF, HEIC. Max 5MB.</p>
+                            </div>
+
                             <div>
                                 <label class="block text-sm font-semibold mb-2">Instructions (optionnel)</label>
                                 <textarea name="notes" rows="3" class="form-input" placeholder="Instructions particulières..."></textarea>
@@ -94,4 +110,28 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+            const proofSection = document.getElementById('payment-proof-section');
+
+            const updateProofVisibility = () => {
+                const selected = document.querySelector('input[name="payment_method"]:checked');
+                if (!selected || !proofSection) return;
+
+                const method = selected.value;
+                if (method === 'mobile_money' || method === 'virement') {
+                    proofSection.classList.remove('hidden');
+                } else {
+                    proofSection.classList.add('hidden');
+                }
+            };
+
+            paymentRadios.forEach(radio => radio.addEventListener('change', updateProofVisibility));
+            updateProofVisibility();
+        });
+    </script>
+@endpush
 
