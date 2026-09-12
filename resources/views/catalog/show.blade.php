@@ -178,12 +178,18 @@
 
                     @if($product->is_out_of_stock && auth()->check())
                         <div class="mb-6">
-                            <button type="button" class="interest-btn btn btn-outline btn-sm" data-product-id="{{ $product->id }}">
+                            <button type="button" class="interest-btn btn btn-outline btn-sm {{ $product->has_interest ? 'text-green-600 border-green-500' : '' }}" data-product-id="{{ $product->id }}" {{ $product->has_interest ? 'disabled' : '' }}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                    @if($product->has_interest)
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                        <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    @else
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                    @endif
                                 </svg>
-                                Être notifié du retour en stock
+                                {{ $product->has_interest ? 'Vous serez notifié' : 'Être notifié du retour en stock' }}
                             </button>
                         </div>
                     @endif
@@ -421,6 +427,7 @@
 
             document.querySelectorAll('.interest-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
+                    if (this.disabled) return;
                     const productId = this.dataset.productId;
                     fetch(`/produit/${productId}/interest`, {
                         method: 'POST',
@@ -429,9 +436,30 @@
                             'Accept': 'application/json',
                         },
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Not authenticated');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         alert(data.message);
+                        this.classList.add('text-green-600', 'border-green-500');
+                        this.disabled = true;
+                        const svg = this.querySelector('svg');
+                        if (svg) {
+                            svg.innerHTML = '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"></path>';
+                        }
+                        const textNode = this.childNodes[this.childNodes.length - 1];
+                        if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+                            textNode.textContent = ' Vous serez notifié';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Interest error:', error);
+                        if (error.message === 'Not authenticated') {
+                            alert('Veuillez vous connecter pour être notifié.');
+                        }
                     });
                 });
             });

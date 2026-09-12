@@ -120,4 +120,22 @@ class Product extends Model
 
         return $badges;
     }
+
+    public function getIsLikedAttribute(): bool
+    {
+        if (auth()->check()) {
+            return $this->likes()->where('user_id', auth()->id())->exists();
+        }
+
+        return false;
+    }
+
+    public function getHasInterestAttribute(): bool
+    {
+        if (auth()->check()) {
+            return $this->interests()->where('user_id', auth()->id())->exists();
+        }
+
+        return false;
+    }
 }
