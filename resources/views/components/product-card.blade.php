@@ -35,14 +35,14 @@
                 </svg>
             </button>
             @if(auth()->check())
-            <button class="like-btn {{ $product->is_liked ? 'text-gold-500' : '' }}" data-product-id="{{ $product->id }}" title="J'aime">
+            <button class="like-btn {{ $product->is_liked ? 'liked' : '' }}" data-product-id="{{ $product->id }}" title="J'aime">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ $product->is_liked ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2">
                     <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                 </svg>
             </button>
             @endif
             @if($product->is_out_of_stock && auth()->check())
-                <button class="interest-btn {{ $product->has_interest ? 'text-green-500' : '' }}" data-product-id="{{ $product->id }}" title="Être notifié" {{ $product->has_interest ? 'disabled' : '' }}>
+                <button class="interest-btn {{ $product->has_interest ? 'interested' : '' }}" data-product-id="{{ $product->id }}" title="Être notifié" {{ $product->has_interest ? 'disabled' : '' }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         @if($product->has_interest)
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>

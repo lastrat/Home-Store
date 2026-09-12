@@ -56,10 +56,10 @@
                     })
                     .then(data => {
                         if (data.liked) {
-                            this.classList.add('text-gold-500');
+                            this.classList.add('liked');
                             this.querySelector('svg').setAttribute('fill', 'currentColor');
                         } else {
-                            this.classList.remove('text-gold-500');
+                            this.classList.remove('liked');
                             this.querySelector('svg').setAttribute('fill', 'none');
                         }
                     })
@@ -91,7 +91,7 @@
                     })
                     .then(data => {
                         alert(data.message);
-                        this.classList.add('text-green-500');
+                        this.classList.add('interested');
                         this.disabled = true;
                         const svg = this.querySelector('svg');
                         if (svg) {

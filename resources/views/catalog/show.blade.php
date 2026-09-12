@@ -178,7 +178,7 @@
 
                     @if($product->is_out_of_stock && auth()->check())
                         <div class="mb-6">
-                            <button type="button" class="interest-btn btn btn-outline btn-sm {{ $product->has_interest ? 'text-green-600 border-green-500' : '' }}" data-product-id="{{ $product->id }}" {{ $product->has_interest ? 'disabled' : '' }}>
+                            <button type="button" class="interest-btn btn btn-outline btn-sm {{ $product->has_interest ? 'interested' : '' }}" data-product-id="{{ $product->id }}" {{ $product->has_interest ? 'disabled' : '' }}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     @if($product->has_interest)
                                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -415,10 +415,10 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.liked) {
-                            this.classList.add('text-gold-500');
+                            this.classList.add('liked');
                             this.querySelector('svg').setAttribute('fill', 'currentColor');
                         } else {
-                            this.classList.remove('text-gold-500');
+                            this.classList.remove('liked');
                             this.querySelector('svg').setAttribute('fill', 'none');
                         }
                     });
@@ -444,7 +444,7 @@
                     })
                     .then(data => {
                         alert(data.message);
-                        this.classList.add('text-green-600', 'border-green-500');
+                        this.classList.add('interested');
                         this.disabled = true;
                         const svg = this.querySelector('svg');
                         if (svg) {
