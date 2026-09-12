@@ -35,3 +35,49 @@
     </section>
 @endsection
 
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    fetch(`/produit/${productId}/like`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.liked) {
+                            this.classList.add('text-gold-500');
+                            this.querySelector('svg').setAttribute('fill', 'currentColor');
+                        } else {
+                            this.classList.remove('text-gold-500');
+                            this.querySelector('svg').setAttribute('fill', 'none');
+                        }
+                    });
+                });
+            });
+
+            document.querySelectorAll('.interest-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    fetch(`/produit/${productId}/interest`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    });
+                });
+            });
+        });
+    </script>
+@endpush
+
