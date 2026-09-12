@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductView extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = ['user_id', 'product_id', 'viewed_at'];
 
     protected $casts = [
