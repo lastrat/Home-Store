@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Mes Alertes Stock - Home Store')
+@section('title', 'Mes Alertes et Intérêts - Home Store')
 
 @section('content')
     <section class="pt-28 pb-8 bg-white border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl sm:text-4xl font-bold mb-2">Mes Alertes Stock</h1>
-            <p class="text-gray-500">Produits que vous souhaitez être alerté quand disponibles</p>
+            <h1 class="text-3xl sm:text-4xl font-bold mb-2">Mes Alertes et Intérêts</h1>
+            <p class="text-gray-500">Produits que vous souhaitez être alerté quand disponibles ou que vous avez marqués comme intéressés</p>
         </div>
     </section>
 
@@ -23,7 +23,11 @@
                             <p class="text-sm text-gray-500">{{ $alert->product->category->name }}</p>
                         </div>
                         <div>
-                            <span class="badge badge-warning">Rupture de stock</span>
+                            @if($alert instanceof \App\Models\ProductInterest)
+                                <span class="badge badge-love">Intéressé</span>
+                            @else
+                                <span class="badge badge-warning">Rupture de stock</span>
+                            @endif
                         </div>
                     </div>
                 @empty
@@ -38,10 +42,6 @@
                         <a href="{{ route('catalog.index') }}" class="btn btn-primary mt-4">Parcourir le catalogue</a>
                     </div>
                 @endforelse
-            </div>
-
-            <div class="mt-8">
-                {{ $alerts->links() }}
             </div>
         </div>
     </section>

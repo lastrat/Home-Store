@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Wishlist;
 use App\Models\StockAlert;
+use App\Models\ProductInterest;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,10 +59,17 @@ class AccountController extends Controller
 
     public function stockAlerts()
     {
-        $alerts = StockAlert::where('user_id', auth()->id())
+        $stockAlerts = StockAlert::where('user_id', auth()->id())
             ->with('product')
             ->latest()
-            ->paginate(12);
+            ->get();
+
+        $interests = ProductInterest::where('user_id', auth()->id())
+            ->with('product')
+            ->latest()
+            ->get();
+
+        $alerts = $stockAlerts->merge($interests)->sortByDesc('created_at')->values();
 
         return view('account.alerts', compact('alerts'));
     }
