@@ -36,6 +36,12 @@
                         <span class="text-gray-500">Total</span>
                         <span class="font-bold text-gold-600">{{ number_format($order->total, 0, ',', ' ') }} FCFA</span>
                     </div>
+                    @if($order->payment_proof)
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500">Justificatif de paiement</span>
+                            <a href="{{ route('checkout.payment_proof.download', $order) }}" class="btn btn-sm btn-outline">Télécharger</a>
+                        </div>
+                    @endif
                 </div>
             </div>
 

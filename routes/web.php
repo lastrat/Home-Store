@@ -89,6 +89,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/commande', [CheckoutController::class, 'store'])->name('checkout.store');
         Route::get('/commande/{order}', [CheckoutController::class, 'receipt'])->name('checkout.receipt');
         Route::get('/commande/{order}/recu', [CheckoutController::class, 'downloadReceipt'])->name('checkout.receipt.download');
+        Route::get('/commande/{order}/payment-proof', [CheckoutController::class, 'downloadPaymentProof'])->name('checkout.payment_proof.download');
 
         Route::middleware('otp.verified')->group(function () {
             Route::get('/mon-compte', [AccountController::class, 'index'])->name('account.index');

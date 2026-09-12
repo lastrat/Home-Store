@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -115,5 +116,26 @@ class CheckoutController extends Controller
             ->setPaper('A4', 'portrait');
 
         return $pdf->download("recu-{$order->order_number}.pdf");
+    }
+
+    public function downloadPaymentProof(Order $order)
+    {
+        $user = auth()->user();
+
+        if (!$user || (! $user->is_admin && $order->user_id !== $user->id)) {
+            abort(403);
+        }
+
+        if (!$order->payment_proof) {
+            abort(404);
+        }
+
+        $path = storage_path('app/public/' . $order->payment_proof);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->download($path);
     }
 }
