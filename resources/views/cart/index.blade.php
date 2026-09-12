@@ -102,6 +102,7 @@
                             <a href="{{ route('catalog.index') }}" class="btn btn-ghost w-full">Continuer mes achats</a>
                             <form method="POST" action="{{ route('cart.clear') }}" onsubmit="return confirm('Vider le panier ?')">
                                 @csrf
+                                @method('DELETE')
                                 <button type="submit" class="w-full text-sm text-brand-red hover:text-brand-red/80 mt-2">Vider le panier</button>
                             </form>
                         </div>
