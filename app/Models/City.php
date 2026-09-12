@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class City extends Model
 {
@@ -20,7 +21,7 @@ class City extends Model
         return $this->hasMany(User::class);
     }
 
-    public function orders(): HasMany
+    public function orders(): HasManyThrough
     {
         return $this->hasManyThrough(Order::class, User::class);
     }
