@@ -160,7 +160,12 @@
                             'Accept': 'application/json',
                         },
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Not authenticated');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.liked) {
                             this.classList.add('text-gold-500');
@@ -168,6 +173,12 @@
                         } else {
                             this.classList.remove('text-gold-500');
                             this.querySelector('svg').setAttribute('fill', 'none');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Like error:', error);
+                        if (error.message === 'Not authenticated') {
+                            alert('Veuillez vous connecter pour aimer ce produit.');
                         }
                     });
                 });
@@ -183,9 +194,20 @@
                             'Accept': 'application/json',
                         },
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Not authenticated');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error('Interest error:', error);
+                        if (error.message === 'Not authenticated') {
+                            alert('Veuillez vous connecter pour être notifié.');
+                        }
                     });
                 });
             });
