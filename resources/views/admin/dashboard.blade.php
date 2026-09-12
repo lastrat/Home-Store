@@ -189,7 +189,7 @@
                     </div>
                 </div>
                 <div class="card p-6">
-                    <h3 class="font-bold text-lg mb-4">Produits populaires</h3>
+                    <h3 class="font-bold text-lg mb-4">Produits populaires (ventes)</h3>
                     <div class="space-y-4">
                         @foreach($topProducts as $product)
                             <div class="flex items-center gap-4">
@@ -202,6 +202,79 @@
                                 </div>
                             </div>
                         @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="card p-6">
+                    <h3 class="font-bold text-lg mb-4">Produits les plus likés</h3>
+                    <div class="space-y-4">
+                        @foreach($topLikedProducts as $product)
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
+                                    <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/50?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-sm">{{ $product->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $product->likes_count }} likes</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-lg mb-4">Produits les plus vus</h3>
+                    <div class="space-y-4">
+                        @foreach($topViewedProducts as $product)
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
+                                    <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : 'https://via.placeholder.com/50?text=' . urlencode($product->name) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-sm">{{ $product->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $product->views_count }} vues</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="card p-6">
+                    <h3 class="font-bold text-lg mb-4">Villes qui commandent le plus</h3>
+                    <div class="space-y-4">
+                        @foreach($topCities as $city)
+                            <div class="flex items-center gap-4">
+                                <div class="flex-1">
+                                    <p class="font-medium text-sm">{{ $city->name }}</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                        <div class="bg-gold-500 h-2 rounded-full" style="width: {{ $topCities->first() && $topCities->first()->orders_count > 0 ? ($city->orders_count / $topCities->first()->orders_count * 100) : 0 }}%"></div>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-semibold">{{ $city->orders_count }} commandes</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-lg mb-4">Clients intéressés par des produits épuisés</h3>
+                    <div class="space-y-4">
+                        @foreach($productInterests as $interest)
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
+                                    <img src="{{ $interest->product->image1 ? asset('storage/' . $interest->product->image1) : 'https://via.placeholder.com/50?text=' . urlencode($interest->product->name) }}" alt="{{ $interest->product->name }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-sm">{{ $interest->product->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $interest->user->name }} - {{ $interest->user->phone }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                        @if($productInterests->isEmpty())
+                            <p class="text-sm text-gray-400">Aucune intérêt pour le moment.</p>
+                        @endif
                     </div>
                 </div>
             </div>

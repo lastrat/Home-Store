@@ -116,6 +116,13 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
+        if ($product->is_active) {
+            ProductView::create([
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+            ]);
+        }
+
         $product->load(['category', 'wishlists' => fn($q) => $q->where('user_id', auth()->id()), 'variants']);
         $related = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)

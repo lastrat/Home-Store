@@ -50,6 +50,21 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
+    public function interests(): HasMany
+    {
+        return $this->hasMany(ProductInterest::class);
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(ProductLike::class);
+    }
+
+    public function views(): HasMany
+    {
+        return $this->hasMany(ProductView::class);
+    }
+
     public function getImagesAttribute(): array
     {
         return array_filter([$this->image1, $this->image2, $this->image3]);

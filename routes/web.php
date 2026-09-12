@@ -14,6 +14,7 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -84,6 +85,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/ajax/cart/wishlist/{product}', [CartController::class, 'toggleWishlist'])->name('ajax.wishlist.toggle');
         Route::post('/ajax/cart/alert/{product}', [CartController::class, 'toggleStockAlert'])->name('ajax.stock.alert.toggle');
         Route::get('/ajax/cart/count', [CartController::class, 'count'])->name('ajax.cart.count');
+
+        Route::post('/produit/{product}/like', [ProductController::class, 'like'])->name('product.like');
+        Route::post('/produit/{product}/interest', [ProductController::class, 'expressInterest'])->name('product.interest');
+        Route::get('/produit/{product}/view', [ProductController::class, 'trackView'])->name('product.view');
+        Route::get('/ajax/products/likes', [ProductController::class, 'getLikesCount'])->name('ajax.product.likes');
 
         Route::get('/commande', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/commande', [CheckoutController::class, 'store'])->name('checkout.store');

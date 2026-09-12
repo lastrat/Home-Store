@@ -63,6 +63,21 @@ class User extends Authenticatable
         return $this->hasMany(StockAlert::class);
     }
 
+    public function productInterests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductInterest::class);
+    }
+
+    public function productLikes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductLike::class);
+    }
+
+    public function productViews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProductView::class);
+    }
+
     public function getAgeAttribute(): ?int
     {
         return $this->birthdate ? $this->birthdate->age : null;
