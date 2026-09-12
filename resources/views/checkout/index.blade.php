@@ -16,7 +16,7 @@
                 <div class="lg:col-span-2">
                     <div class="card p-8">
                         <h2 class="text-xl font-bold mb-6">Mode de paiement</h2>
-                        <form method="POST" action="{{ route('checkout.store') }}" class="space-y-6">
+                        <form method="POST" action="{{ route('checkout.store') }}" enctype="multipart/form-data" class="space-y-6">
                             @csrf
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <label class="cursor-pointer">
