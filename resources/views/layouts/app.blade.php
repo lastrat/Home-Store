@@ -63,6 +63,14 @@
     </script>
 
     <link rel="stylesheet" href="{{ asset('css/modern.css') }}">
+    <style>
+        .product-card .actions button.like-btn.liked {
+            color: var(--color-gold);
+        }
+        .product-card .actions button.interest-btn.interested {
+            color: #16a34a;
+        }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
