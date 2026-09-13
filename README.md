@@ -12,16 +12,24 @@ Site vitrine et catalogue privé pour Home Store Chic Living, spécialisé dans 
 - Contact
 
 ### Partie Privée (accès sur compte)
-- Catalogue privé avec filtres avancés (catégorie, taille, prix, couleur, matière)
+- Catalogue privé avec filtres avancés (famille, sous-catégorie, taille, prix, couleur, matière)
 - Fiche produit avec galerie 3 photos + 1 vidéo
+- **J'aime** sur les produits
+- **Intérêts** pour les produits en rupture de stock avec toggle on/off
+- **Suivi des vues** produits
 - Panier et validation de commande sans paiement en ligne
 - Génération automatique de reçu PDF (DomPDF)
+- Upload de preuve de paiement par le client
 - Coups de cœur / wishlist
 - Alertes stock pour produits épuisés
 - Historique des commandes et reçus
 
 ### Back-office Admin
 - Tableau de bord avec statistiques
+- Produits les plus likés
+- Produits les plus vus
+- Statistiques par ville / quartier
+- Clients intéressés par des produits épuisés
 - Gestion des produits et stocks
 - Gestion des commandes avec mise à jour des statuts
 - Gestion des clients avec données démographiques
