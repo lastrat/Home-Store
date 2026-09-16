@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="h-16 sm:h-24 md:h-32 lg:h-40">
+                    <div class="h-24 sm:h-28 md:h-32 lg:h-40">
                         <img src="{{ asset('logo/blznc 2@3x-8.png') }}" alt="Home Store" class="h-full w-auto object-contain">
                     </div>
                 </div>
