@@ -2,8 +2,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <div class="h-16">
-                    <img src="{{ asset('logo/logois2.png') }}" alt="Home Store" class="h-full w-full object-cover">
+                <div class="h-10 sm:h-14 md:h-16">
+                    <img src="{{ asset('logo/logois2.png') }}" alt="Home Store" class="h-full w-auto object-contain">
                 </div>
             </a>
 
@@ -88,6 +88,7 @@
                 <a href="{{ route('catalog.index') }}" class="block px-4 py-3 text-gold-400 font-medium rounded-xl hover:bg-white/5">Mon Catalogue</a>
                 <a href="{{ route('cart.index') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Mon Panier</a>
                 <a href="{{ route('account.index') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Mon Compte</a>
+                 <a href="{{ route('admin.dashboard') }}" class="block px-4 py-3 text-white rounded-xl hover:bg-white/5">Admin</a>
                 <form method="POST" action="{{ route('logout') }}" class="block">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-3 text-red-400 rounded-xl hover:bg-white/5">Déconnexion</button>
