@@ -3,11 +3,11 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="h-40">
-                        <img src="{{ asset('logo/blznc 2@3x-8.png') }}" alt="Home Store" class="h-full w-full object-cover">
+                    <div class="h-16 sm:h-24 md:h-32 lg:h-40">
+                        <img src="{{ asset('logo/blznc 2@3x-8.png') }}" alt="Home Store" class="h-full w-auto object-contain">
                     </div>
                 </div>
-                <p class="text-gray-400 text-sm leading-relaxed max-w-md">
+                <p class="text-gray-400 text-sm leading-relaxed max-w-md text-justify">
                     Votre destination mode et décoration haut de gamme. Découvrez notre collection exclusive et vivez l'expérience shopping chic.
                 </p>
             </div>
